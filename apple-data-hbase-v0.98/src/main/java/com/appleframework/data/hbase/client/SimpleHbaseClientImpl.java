@@ -44,6 +44,7 @@ import com.appleframework.data.hbase.util.Util;
  * 
  * @author xinzhi
  * */
+@SuppressWarnings("deprecation")
 public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 
     @Override
@@ -124,15 +125,13 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                     get.setMaxVersions(queryExtInfo.getMaxVersions());
                 }
                 if (queryExtInfo.isTimeRangeSet()) {
-                    get.setTimeRange(queryExtInfo.getMinStamp(),
-                            queryExtInfo.getMaxStamp());
+                    get.setTimeRange(queryExtInfo.getMinStamp(), queryExtInfo.getMaxStamp());
                 }
             }
 
             applyRequestFamilyAndQualifier(type, get);
 
-            return convertToSimpleHbaseDOWithKeyResult(
-                    htableInterface.get(get), type);
+            return convertToSimpleHbaseDOWithKeyResult(htableInterface.get(get), type);
         } catch (IOException e) {
             throw new SimpleHBaseException("findObjectAndKey_internal. rowKey="
                     + rowKey + " type=" + type, e);
@@ -441,8 +440,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                 if (ignoreCounter-- > 0) {
                     continue;
                 }
-                List<SimpleHbaseDOResult<T>> tem = convertToSimpleHbaseDOResult(
-                        result, type);
+                List<SimpleHbaseDOResult<T>> tem = convertToSimpleHbaseDOResult(result, type);
                 if (!tem.isEmpty()) {
                     resultList.add(tem);
                     if (++resultCounter >= length) {
@@ -581,7 +579,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         }
     }
 
-    private <T> void putObjectList_internal(List<PutRequest<T>> putRequestList) {
+	private <T> void putObjectList_internal(List<PutRequest<T>> putRequestList) {
 
         Util.checkNull(putRequestList);
 
@@ -593,22 +591,18 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             Util.checkPutRequest(putRequest);
         }
 
-        TypeInfo typeInfo = findTypeInfo(putRequestList.get(0).getT()
-                .getClass());
+        TypeInfo typeInfo = findTypeInfo(putRequestList.get(0).getT().getClass());
 
         List<Put> puts = new ArrayList<Put>();
 
         for (PutRequest<T> putRequest : putRequestList) {
             Put put = new Put(putRequest.getRowKey().toBytes());
             for (ColumnInfo columnInfo : typeInfo.getColumnInfos()) {
-                byte[] value = convertPOJOFieldToBytes(putRequest.getT(),
-                        columnInfo);
+                byte[] value = convertPOJOFieldToBytes(putRequest.getT(), columnInfo);
                 if (putRequest.getTimestamp() == null) {
-                    put.add(columnInfo.familyBytes, columnInfo.qualifierBytes,
-                            value);
+                    put.add(columnInfo.familyBytes, columnInfo.qualifierBytes, value);
                 } else {
-                    put.add(columnInfo.familyBytes, columnInfo.qualifierBytes,
-                            putRequest.getTimestamp().longValue(), value);
+                    put.add(columnInfo.familyBytes, columnInfo.qualifierBytes, putRequest.getTimestamp().longValue(), value);
                 }
             }
 
@@ -616,13 +610,11 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         }
 
         HTableInterface htableInterface = htableInterface();
-
+        htableInterface.setAutoFlush(getAutoFlush());
         try {
             htableInterface.put(puts);
         } catch (IOException e) {
-            throw new SimpleHBaseException(
-                    "putObjectList_internal. putRequestList=" + putRequestList,
-                    e);
+            throw new SimpleHBaseException("putObjectList_internal. putRequestList=" + putRequestList, e);
         } finally {
             //Util.close(htableInterface);
             closeHTable(htableInterface);
@@ -657,9 +649,8 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 
     }
 
-    @Override
-    public <T> boolean updateObjectWithVersion(RowKey rowKey, T t,
-            Object oldVersion) {
+	@Override
+    public <T> boolean updateObjectWithVersion(RowKey rowKey, T t, Object oldVersion) {
         Util.checkRowKey(rowKey);
         Util.checkNull(t);
         //not check oldVersion, oldVersion can be null.
@@ -674,10 +665,10 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         }
 
         ColumnInfo versionedColumnInfo = typeInfo.getVersionedColumnInfo();
-        byte[] oldValueOfVersion = convertValueToBytes(oldVersion,
-                versionedColumnInfo);
+        byte[] oldValueOfVersion = convertValueToBytes(oldVersion, versionedColumnInfo);
 
         HTableInterface htableInterface = htableInterface();
+        htableInterface.setAutoFlush(getAutoFlush());
         boolean result = false;
         try {
             result = htableInterface.checkAndPut(rowKey.toBytes(),
@@ -738,6 +729,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         }
 
         HTableInterface htableInterface = htableInterface();
+        htableInterface.setAutoFlush(getAutoFlush());
         try {
             htableInterface.put(put);
         } catch (IOException e) {
@@ -963,10 +955,10 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         HTableInterface htableInterface = htableInterface();
         try {
             htableInterface.delete(deletes);
+            htableInterface.setAutoFlush(getAutoFlush());
         } catch (IOException e) {
             throw new SimpleHBaseException(
-                    "deleteObjectList_internal. deleteRequestList = "
-                            + deleteRequestList, e);
+                    "deleteObjectList_internal. deleteRequestList = " + deleteRequestList, e);
         } finally {
             //Util.close(htableInterface);
             closeHTable(htableInterface);
@@ -974,14 +966,12 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 
         //successful delete will clear the items of deletes list.
         if (deletes.size() > 0) {
-            throw new SimpleHBaseException(
-                    "deleteObjectList_internal. deletes=" + deletes);
+            throw new SimpleHBaseException("deleteObjectList_internal. deletes=" + deletes);
         }
     }
 
     @Override
-    public void deleteObjectList(RowKey startRowKey, RowKey endRowKey,
-            Class<?> type) {
+    public void deleteObjectList(RowKey startRowKey, RowKey endRowKey, Class<?> type) {
         Util.checkRowKey(startRowKey);
         Util.checkRowKey(endRowKey);
         Util.checkNull(type);

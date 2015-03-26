@@ -45,21 +45,9 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
         return hbaseDataSource.getHTable(hbaseTableConfig.getHbaseTableSchema().getTableName());
     }
     
-	/*protected HTableInterface htableInterface(HTableInterfaceFactory tableFactory) {
-		String tableName = hbaseTableConfig.getHbaseTableSchema().getTableName();
-		HTableInterface t = null;
-		try {
-			if (tableFactory != null) {
-				t = tableFactory.createHTableInterface(hbaseDataSource.getHbaseConfiguration(), tableName.getBytes("UTF-8"));
-			}
-			else {
-				t = hbaseDataSource.getHTable(hbaseTableConfig.getHbaseTableSchema().getTableName());
-			}
-			return t;
-		} catch (Exception ex) {
-			throw new SimpleHBaseException(ex);
-		}
-	}*/
+    protected boolean getAutoFlush() {
+        return hbaseTableConfig.isAutoFlush();
+    }
     
     protected void closeHTable(HTableInterface table) {
     	try {

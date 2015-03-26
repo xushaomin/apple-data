@@ -45,6 +45,7 @@
 	
 	<bean id="hbaseTableConfig" class="com.appleframework.data.hbase.config.HBaseTableConfig"
     	init-method="init">
+    	<property name="autoFlush" value="${hbase.table.auto.flush:true}" />
 		<property name="configResource">   
 			<value>classpath:/config/hbase/simple-hbase.xml</value>   
 		</property>		

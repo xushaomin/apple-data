@@ -32,6 +32,7 @@ import com.appleframework.data.hbase.util.XmlUtil;
  * @author xinzhi
  * */
 public class HBaseTableConfig {
+	
     /** log. */
     final private static Logger               log              = Logger.getLogger(HBaseTableConfig.class);
 
@@ -41,6 +42,9 @@ public class HBaseTableConfig {
      * */
     @ConfigAttr
     private Resource                          configResource;
+    
+    private boolean                           autoFlush        = true;
+
 
     //------------bean config-------------------
     private HBaseTableSchema                  hbaseTableSchema = new HBaseTableSchema();
@@ -145,9 +149,17 @@ public class HBaseTableConfig {
 
     public Map<String, HBaseQuery> getQueryMap() {
         return queryMap;
-    }
+    }    
 
-    @Override
+    public boolean isAutoFlush() {
+		return autoFlush;
+	}
+
+	public void setAutoFlush(boolean autoFlush) {
+		this.autoFlush = autoFlush;
+	}
+
+	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(hbaseTableSchema.toString());

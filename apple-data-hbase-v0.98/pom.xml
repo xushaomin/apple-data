@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.appleframework.data</groupId>
 		<artifactId>apple-data</artifactId>
-		<version>0.0.2.RELEASE</version>
+		<version>0.0.3.RELEASE</version>
 	</parent>
 	<artifactId>apple-data-hbase-v0.98</artifactId>
 	<name>apple-data-hbase-v0.98</name>
