@@ -35,15 +35,11 @@ public class HBaseTableConfigParser {
         Util.checkNull(tableSchema);
         Util.checkNull(hbaseColumnSchemas);
 
-        Node hbaseTableSchemaNode = XmlUtil.findTopLevelNode(inputStream,
-                "HBaseTableSchema");
+        Node hbaseTableSchemaNode = XmlUtil.findTopLevelNode(inputStream, "HBaseTableSchema");
 
-        tableSchema.setTableName(XmlUtil.getAttr(hbaseTableSchemaNode,
-                "tableName"));
-        tableSchema.setDefaultFamily(XmlUtil.getAttr(hbaseTableSchemaNode,
-                "defaultFamily"));
-        tableSchema.setRowKeyHandlerName(XmlUtil.getAttr(hbaseTableSchemaNode,
-                "rowKeyHandlerName"));
+        tableSchema.setTableName(XmlUtil.getAttr(hbaseTableSchemaNode, "tableName"));
+        tableSchema.setDefaultFamily(XmlUtil.getAttr(hbaseTableSchemaNode, "defaultFamily"));
+        tableSchema.setRowKeyHandlerName(XmlUtil.getAttr(hbaseTableSchemaNode, "rowKeyHandlerName"));
 
         NodeList nodeList = hbaseTableSchemaNode.getChildNodes();
 
@@ -56,8 +52,7 @@ public class HBaseTableConfigParser {
             columnSchema.setFamily(XmlUtil.getAttr(columnNode, "family"));
             columnSchema.setQualifier(XmlUtil.getAttr(columnNode, "qualifier"));
             columnSchema.setTypeName(XmlUtil.getAttr(columnNode, "typeName"));
-            columnSchema.setTypeHandlerName(XmlUtil.getAttr(columnNode,
-                    "handler"));
+            columnSchema.setTypeHandlerName(XmlUtil.getAttr(columnNode, "handler"));
 
             hbaseColumnSchemas.add(columnSchema);
         }
@@ -68,8 +63,7 @@ public class HBaseTableConfigParser {
      * */
     public static List<HBaseQuery> parseHBaseQuery(InputStream inputStream) {
         Util.checkNull(inputStream);
-        Node statementsNode = XmlUtil.findTopLevelNode(inputStream,
-                "statements");
+        Node statementsNode = XmlUtil.findTopLevelNode(inputStream, "statements");
         return parseHBaseQueryList(statementsNode);
     }
 
@@ -78,25 +72,21 @@ public class HBaseTableConfigParser {
      * */
     public static List<HBaseQuery> parseHBaseQuery(String filePath) {
         Util.checkEmptyString(filePath);
-        Node statementsNode = XmlUtil.findTopLevelNodeInFile(filePath,
-                "statements");
+        Node statementsNode = XmlUtil.findTopLevelNodeInFile(filePath, "statements");
         return parseHBaseQueryList(statementsNode);
     }
 
     /**
      * Parse HBaseQuery.
      * */
-    public static List<HBaseQuery> parseHBaseQueryWithRawHQL(String hql,
-            String id) {
+    public static List<HBaseQuery> parseHBaseQueryWithRawHQL(String hql, String id) {
 
         Util.checkEmptyString(hql);
-        String content = "<SimpleHbase><statements><statement id=\"" + id
-                + "\">";
+        String content = "<SimpleHbase><statements><statement id=\"" + id + "\">";
         content = content + hql;
         content = content + "</statement></statements></SimpleHbase>";
 
-        Node statementsNode = XmlUtil.findTopLevelNodeInString(content,
-                "statements");
+        Node statementsNode = XmlUtil.findTopLevelNodeInString(content, "statements");
 
         return parseHBaseQueryList(statementsNode);
     }
@@ -119,8 +109,7 @@ public class HBaseTableConfigParser {
             }
 
             String id = XmlUtil.getAttr(node, "id");
-            HBaseQuery hbaseQuery = new HBaseQuery(id,
-                    HQLNodeParser.parse(node));
+            HBaseQuery hbaseQuery = new HBaseQuery(id, HQLNodeParser.parse(node));
             hbaseQueries.add(hbaseQuery);
         }
 

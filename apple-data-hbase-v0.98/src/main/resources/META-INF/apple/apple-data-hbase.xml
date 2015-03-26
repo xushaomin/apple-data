@@ -8,6 +8,7 @@
     
     <bean id="hbaseDataSource" class="com.appleframework.data.hbase.config.HBaseDataSource"
     	init-method="init">
+    	<property name="id" value="apple-hbase" /> 
 		<property name="hbaseProperties">
     		<value>
          		fs.default.name=${fs.default.name}
@@ -45,7 +46,7 @@
 	<bean id="hbaseTableConfig" class="com.appleframework.data.hbase.config.HBaseTableConfig"
     	init-method="init">
 		<property name="configResource">   
-			<value>classpath*:config/hbase/simple-hbase.xml</value>   
+			<value>classpath:/config/hbase/simple-hbase.xml</value>   
 		</property>		
 	</bean>
 	

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -21,6 +22,7 @@ public class HbasePoiRecentTest2 {
 	public void testAddOpinion1() {
 
 		try {
+			
 			List<Poi> resultList = simpleHbaseClient.findObjectList(
 		            new PoiRowKey("02214092058130000020150324000000"), new PoiRowKey("02214092058130000020150325000000"), Poi.class);
 		    //log.info(resultList);
