@@ -25,8 +25,7 @@ public class ConfigUtil {
      * Return positive integer value by parsing the value with key in config,
      * otherwise returns defaultValue.
      * */
-    public static int parsePositiveInt(Map<String, String> config, String key,
-            int defaultValue) {
+    public static int parsePositiveInt(Map<String, String> config, String key, int defaultValue) {
         Util.checkNull(config);
         Util.checkEmptyString(key);
         Util.check(defaultValue > 0);
@@ -47,8 +46,7 @@ public class ConfigUtil {
     /**
      * Load config file.
      * */
-    public static Map<String, String> loadConfigFile(
-            @Nullable InputStream inputStream) throws IOException {
+    public static Map<String, String> loadConfigFile(@Nullable InputStream inputStream) throws IOException {
 
         Map<String, String> result = new HashMap<String, String>();
         if (inputStream == null) {
@@ -57,10 +55,8 @@ public class ConfigUtil {
 
         LineNumberReader lineNumberReader = null;
         try {
-            lineNumberReader = new LineNumberReader(new InputStreamReader(
-                    inputStream));
-            for (String line = lineNumberReader.readLine(); line != null; line = lineNumberReader
-                    .readLine()) {
+            lineNumberReader = new LineNumberReader(new InputStreamReader(inputStream));
+            for (String line = lineNumberReader.readLine(); line != null; line = lineNumberReader.readLine()) {
 
                 String[] parts = line.split("=");
                 if (parts == null || parts.length != 2) {

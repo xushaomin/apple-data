@@ -60,22 +60,17 @@ public class HBaseTableConfig {
 
         try {
             List<HBaseColumnSchema> hbaseColumnSchemas = new ArrayList<HBaseColumnSchema>();
-            HBaseTableConfigParser.parseTableSchema(
-                    configResource.getInputStream(), hbaseTableSchema,
-                    hbaseColumnSchemas);
+            HBaseTableConfigParser.parseTableSchema(configResource.getInputStream(), hbaseTableSchema, hbaseColumnSchemas);
             hbaseTableSchema.init(hbaseColumnSchemas);
 
-            List<HBaseQuery> hbaseQueries = HBaseTableConfigParser
-                    .parseHBaseQuery(configResource.getInputStream());
+            List<HBaseQuery> hbaseQueries = HBaseTableConfigParser.parseHBaseQuery(configResource.getInputStream());
 
             addHBaseQueryList(hbaseQueries);
 
-            List<Node> typeInfoNodes = XmlUtil.findTopLevelNodes(
-                    configResource.getInputStream(), "MappingType");
+            List<Node> typeInfoNodes = XmlUtil.findTopLevelNodes(configResource.getInputStream(), "MappingType");
 
             for (Node typeInfoNode : typeInfoNodes) {
-                TypeInfo typeInfo = TypeInfo.parseNode(typeInfoNode,
-                        hbaseTableSchema);
+                TypeInfo typeInfo = TypeInfo.parseNode(typeInfoNode, hbaseTableSchema);
                 addTypeInfo(typeInfo);
             }
 
