@@ -137,7 +137,8 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             throw new SimpleHBaseException("findObjectAndKey_internal. rowKey="
                     + rowKey + " type=" + type, e);
         } finally {
-            Util.close(htableInterface);
+            //Util.close(htableInterface);
+            closeHTable(htableInterface);
         }
 
     }
@@ -280,8 +281,9 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                     "findObjectAndKeyList_internal. startRowKey=" + startRowKey
                             + " endRowKey=" + endRowKey + " type=" + type, e);
         } finally {
-            Util.close(resultScanner);
+            //Util.close(resultScanner);
             Util.close(htableInterface);
+            closeHTable(htableInterface);
         }
 
         return resultList;
@@ -314,15 +316,14 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             List<SimpleHbaseDOWithKeyResult<T>> resultList = new ArrayList<SimpleHbaseDOWithKeyResult<T>>();
             Result[] hbaseResults = htableInterface.get(getList);
             for (Result hbaseResult : hbaseResults) {
-                resultList.add(convertToSimpleHbaseDOWithKeyResult(hbaseResult,
-                        type));
+                resultList.add(convertToSimpleHbaseDOWithKeyResult(hbaseResult, type));
             }
             return resultList;
         } catch (IOException e) {
-            throw new SimpleHBaseException("findOjectAndKeyBatch. rowKeyList="
-                    + rowKeyList + " type=" + type, e);
+            throw new SimpleHBaseException("findOjectAndKeyBatch. rowKeyList=" + rowKeyList + " type=" + type, e);
         } finally {
-            Util.close(htableInterface);
+            //Util.close(htableInterface);
+        	closeHTable(htableInterface);
         }
     }
 
@@ -370,7 +371,8 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             throw new SimpleHBaseException("findObject_internal_mv. rowKey="
                     + rowKey + " type=" + type, e);
         } finally {
-            Util.close(htableInterface);
+        	closeHTable(htableInterface);
+            //Util.close(htableInterface);
         }
     }
 
@@ -454,7 +456,8 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                             + " endRowKey=" + endRowKey + " type=" + type, e);
         } finally {
             Util.close(resultScanner);
-            Util.close(htableInterface);
+            //Util.close(htableInterface);
+            closeHTable(htableInterface);
         }
 
         return resultList;
@@ -621,7 +624,8 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                     "putObjectList_internal. putRequestList=" + putRequestList,
                     e);
         } finally {
-            Util.close(htableInterface);
+            //Util.close(htableInterface);
+            closeHTable(htableInterface);
         }
     }
 
@@ -683,7 +687,8 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             throw new SimpleHBaseException("updateObjectWithVersion. rowKey="
                     + rowKey + " t=" + t + " oldVersion=" + oldVersion, e);
         } finally {
-            Util.close(htableInterface);
+            //Util.close(htableInterface);
+            closeHTable(htableInterface);
         }
 
         return result;
@@ -694,8 +699,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         Util.checkEmptyString(hql);
 
         ProgContext progContext = TreeUtil.parseProgContext(hql);
-        InserthqlcContext context = ContextUtil
-                .parseInserthqlcContext(progContext);
+        InserthqlcContext context = ContextUtil.parseInserthqlcContext(progContext);
         Util.checkNull(context);
 
         String tableName = TreeUtil.parseTableName(progContext);
@@ -703,20 +707,17 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 
         List<HBaseColumnSchema> hbaseColumnSchemaList = ContextUtil
                 .parseHBaseColumnSchemaList(hbaseTableConfig, context.cidList());
-        List<Constant2Context> constant2ContextList = context.constant2List()
-                .constant2();
+        List<Constant2Context> constant2ContextList = context.constant2List().constant2();
         Util.check(hbaseColumnSchemaList.size() == constant2ContextList.size());
 
         RowkeyexpContext rowkeyexpContext = context.rowkeyexp();
-        RowKey rowKey = ContextUtil.parseRowKey(rowkeyexpContext,
-                simpleHbaseRuntimeSetting);
+        RowKey rowKey = ContextUtil.parseRowKey(rowkeyexpContext, simpleHbaseRuntimeSetting);
         Util.checkRowKey(rowKey);
 
         Date ts = null;
         TsexpContext tsexpContext = context.tsexp();
         if (tsexpContext != null) {
-            ts = ContextUtil.parseTimeStampDate(tsexpContext,
-                    simpleHbaseRuntimeSetting);
+            ts = ContextUtil.parseTimeStampDate(tsexpContext, simpleHbaseRuntimeSetting);
         }
 
         Put put = new Put(rowKey.toBytes());
@@ -737,13 +738,13 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         }
 
         HTableInterface htableInterface = htableInterface();
-
         try {
             htableInterface.put(put);
         } catch (IOException e) {
             throw new SimpleHBaseException("put. hql=" + hql, e);
         } finally {
-            Util.close(htableInterface);
+            //Util.close(htableInterface);
+            closeHTable(htableInterface);
         }
     }
 
@@ -835,7 +836,8 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             throw new SimpleHBaseException("select. hql=" + hql, e);
         } finally {
             Util.close(resultScanner);
-            Util.close(htableInterface);
+            //Util.close(htableInterface);
+            closeHTable(htableInterface);
         }
 
         return resultList;
@@ -966,7 +968,8 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                     "deleteObjectList_internal. deleteRequestList = "
                             + deleteRequestList, e);
         } finally {
-            Util.close(htableInterface);
+            //Util.close(htableInterface);
+            closeHTable(htableInterface);
         }
 
         //successful delete will clear the items of deletes list.
@@ -1110,7 +1113,8 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                         + temScan, e);
             } finally {
                 Util.close(resultScanner);
-                Util.close(htableInterface);
+                //Util.close(htableInterface);
+                closeHTable(htableInterface);
             }
 
             final int deleteListSize = deletes.size();
@@ -1125,7 +1129,8 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                 throw new SimpleHBaseException("delete_internal. scan = "
                         + temScan, e);
             } finally {
-                Util.close(htableInterface);
+                //Util.close(htableInterface);
+                closeHTable(htableInterface);
             }
 
             //successful delete will clear the items of deletes list.

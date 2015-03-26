@@ -32,7 +32,8 @@ import com.appleframework.data.hbase.util.Util;
  * 
  * @author xinzhi
  * */
-abstract public class SimpleHbaseClientBase implements SimpleHbaseClient {
+public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
+	
     protected HBaseDataSource           hbaseDataSource;
     protected HBaseTableConfig          hbaseTableConfig;
     protected SimpleHbaseRuntimeSetting simpleHbaseRuntimeSetting = new SimpleHbaseRuntimeSetting();
@@ -41,16 +42,44 @@ abstract public class SimpleHbaseClientBase implements SimpleHbaseClient {
      * Get HTableInterface.
      * */
     protected HTableInterface htableInterface() {
-        return hbaseDataSource.getHTable(hbaseTableConfig.getHbaseTableSchema()
-                .getTableName());
+        return hbaseDataSource.getHTable(hbaseTableConfig.getHbaseTableSchema().getTableName());
+    }
+    
+	/*protected HTableInterface htableInterface(HTableInterfaceFactory tableFactory) {
+		String tableName = hbaseTableConfig.getHbaseTableSchema().getTableName();
+		HTableInterface t = null;
+		try {
+			if (tableFactory != null) {
+				t = tableFactory.createHTableInterface(hbaseDataSource.getHbaseConfiguration(), tableName.getBytes("UTF-8"));
+			}
+			else {
+				t = hbaseDataSource.getHTable(hbaseTableConfig.getHbaseTableSchema().getTableName());
+			}
+			return t;
+		} catch (Exception ex) {
+			throw new SimpleHBaseException(ex);
+		}
+	}*/
+    
+    protected void closeHTable(HTableInterface table) {
+    	try {
+    		if (hbaseDataSource.getTableFactory() != null) {
+        		hbaseDataSource.getTableFactory().releaseHTableInterface(table);
+    		}
+    		else {
+    			table.close();
+    		}
+    	} catch (Exception e) {
+			
+		}
+    	
     }
 
     /**
      * Get AggregationClient.
      * */
     protected AggregationClient aggregationClient() {
-        AggregationClient aggregationClient = new AggregationClient(
-                hbaseDataSource.getHbaseConfiguration());
+        AggregationClient aggregationClient = new AggregationClient(hbaseDataSource.getHbaseConfiguration());
         return aggregationClient;
     }
 
@@ -65,16 +94,14 @@ abstract public class SimpleHbaseClientBase implements SimpleHbaseClient {
      * Find HBaseColumnSchema by family and qualifier.
      * */
     protected HBaseColumnSchema columnSchema(String family, String qualifier) {
-        return hbaseTableConfig.getHbaseTableSchema().findColumnSchema(family,
-                qualifier);
+        return hbaseTableConfig.getHbaseTableSchema().findColumnSchema(family, qualifier);
     }
 
     /**
      * Find HBaseColumnSchema by qualifier.
      * */
     protected HBaseColumnSchema columnSchema(String qualifier) {
-        return hbaseTableConfig.getHbaseTableSchema().findColumnSchema(
-                qualifier);
+        return hbaseTableConfig.getHbaseTableSchema().findColumnSchema(qualifier);
     }
 
     /**
@@ -107,8 +134,7 @@ abstract public class SimpleHbaseClientBase implements SimpleHbaseClient {
 
         if (simpleHbaseRuntimeSetting.isIntelligentScanSize()) {
             if (queryExtInfo != null && queryExtInfo.isLimitSet()) {
-                long limitScanSize = queryExtInfo.getStartIndex()
-                        + queryExtInfo.getLength();
+                long limitScanSize = queryExtInfo.getStartIndex() + queryExtInfo.getLength();
                 if (limitScanSize > Integer.MAX_VALUE) {
                     cachingSize = Integer.MAX_VALUE;
                 } else {
@@ -154,8 +180,7 @@ abstract public class SimpleHbaseClientBase implements SimpleHbaseClient {
      * Apply family and qualifier to scan request, to prevent return more data
      * than we need.
      * */
-    protected <T> void applyRequestFamilyAndQualifier(Class<? extends T> type,
-            Scan scan) {
+    protected <T> void applyRequestFamilyAndQualifier(Class<? extends T> type, Scan scan) {
         TypeInfo typeInfo = findTypeInfo(type);
         List<ColumnInfo> columnInfoList = typeInfo.getColumnInfos();
         for (ColumnInfo columnInfo : columnInfoList) {
@@ -168,8 +193,7 @@ abstract public class SimpleHbaseClientBase implements SimpleHbaseClient {
      * Apply family and qualifier to scan request, to prevent return more data
      * than we need.
      * */
-    protected <T> void applyRequestFamilyAndQualifier(Class<? extends T> type,
-            Get get) {
+    protected <T> void applyRequestFamilyAndQualifier(Class<? extends T> type, Get get) {
         TypeInfo typeInfo = findTypeInfo(type);
         List<ColumnInfo> columnInfoList = typeInfo.getColumnInfos();
         for (ColumnInfo columnInfo : columnInfoList) {
@@ -185,8 +209,7 @@ abstract public class SimpleHbaseClientBase implements SimpleHbaseClient {
     protected <T> void applyRequestFamilyAndQualifier(
             List<HBaseColumnSchema> hbaseColumnSchemaList, Scan scan) {
         for (HBaseColumnSchema hbaseColumnSchema : hbaseColumnSchemaList) {
-            scan.addColumn(hbaseColumnSchema.getFamilyBytes(),
-                    hbaseColumnSchema.getQualifierBytes());
+            scan.addColumn(hbaseColumnSchema.getFamilyBytes(), hbaseColumnSchema.getQualifierBytes());
         }
     }
 
@@ -196,8 +219,7 @@ abstract public class SimpleHbaseClientBase implements SimpleHbaseClient {
      * than we need.
      * */
     protected void applyRequestFamilyAndQualifier(Scan scan) {
-        List<String> families = hbaseTableConfig.getHbaseTableSchema()
-                .findAllFamilies();
+        List<String> families = hbaseTableConfig.getHbaseTableSchema().findAllFamilies();
         for (String s : families) {
             scan.addFamily(Bytes.toBytes(s));
         }
@@ -210,8 +232,7 @@ abstract public class SimpleHbaseClientBase implements SimpleHbaseClient {
      * 
      * @return SimpleHbaseCellResult list.
      * */
-    protected List<SimpleHbaseCellResult> convertToSimpleHbaseCellResultList(
-            Result hbaseResult) {
+    protected List<SimpleHbaseCellResult> convertToSimpleHbaseCellResultList(Result hbaseResult) {
 
         Cell[] cells = hbaseResult.rawCells();
         if (cells == null || cells.length == 0) {
@@ -235,11 +256,9 @@ abstract public class SimpleHbaseClientBase implements SimpleHbaseClient {
 
                 byte[] hbaseValue = CellUtil.cloneValue(cell);
 
-                HBaseColumnSchema hbaseColumnSchema = columnSchema(familyStr,
-                        qualifierStr);
+                HBaseColumnSchema hbaseColumnSchema = columnSchema(familyStr, qualifierStr);
                 TypeHandler typeHandler = hbaseColumnSchema.getTypeHandler();
-                Object valueObject = typeHandler.toObject(
-                        hbaseColumnSchema.getType(), hbaseValue);
+                Object valueObject = typeHandler.toObject(hbaseColumnSchema.getType(), hbaseValue);
 
                 long ts = cell.getTimestamp();
                 Date tsDate = new Date(ts);
@@ -260,8 +279,7 @@ abstract public class SimpleHbaseClientBase implements SimpleHbaseClient {
 
             byte[] row = CellUtil.cloneRow(cells[0]);
 
-            rowKeyHandler = hbaseTableConfig.getHbaseTableSchema()
-                    .getRowKeyHandler();
+            rowKeyHandler = hbaseTableConfig.getHbaseTableSchema().getRowKeyHandler();
             RowKey rowKey = rowKeyHandler.convert(row);
 
             for (SimpleHbaseCellResult cell : resultList) {

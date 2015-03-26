@@ -11,6 +11,8 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.HTableInterface;
+import org.apache.hadoop.hbase.client.HTableInterfaceFactory;
+import org.apache.hadoop.hbase.client.HTablePool;
 import org.apache.log4j.Logger;
 import org.springframework.core.io.Resource;
 
@@ -25,6 +27,7 @@ import com.appleframework.data.hbase.util.Util;
  * 
  * @author xinzhi
  * */
+@SuppressWarnings("deprecation")
 public class HBaseDataSource {
 
     /** log. */
@@ -56,11 +59,17 @@ public class HBaseDataSource {
      * hbase Configuration.
      * */
     private Configuration       hbaseConfiguration;
+    
+    private HTableInterfaceFactory tableFactory;
+    
+	private HTablePool tablePool;
+    
+    private Integer tablePoolMaxSize = 10;
 
     /**
      * init dataSource.
      * */
-    public void init() {
+	public void init() {
         try {
 
             System.setProperty("javax.xml.parsers.DocumentBuilderFactory",
@@ -69,6 +78,9 @@ public class HBaseDataSource {
                     "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl");
 
             initHbaseConfiguration();
+            
+            tablePool = new HTablePool(hbaseConfiguration, tablePoolMaxSize);
+            tableFactory = new PooledHTableFactory(tablePool);
 
             log.info(this);
 
@@ -87,13 +99,18 @@ public class HBaseDataSource {
     public HTableInterface getHTable(String tableName) {
         Util.checkEmptyString(tableName);
         try {
-            return new HTable(hbaseConfiguration, TableNameUtil.getTableName(tableName));
+        	if (tableFactory != null) {
+    			return tableFactory.createHTableInterface(hbaseConfiguration, tableName.getBytes("UTF-8"));
+    		}
+    		else {
+    			return new HTable(hbaseConfiguration, TableNameUtil.getTableName(tableName));
+    		}
         } catch (Exception e) {
             log.error(e);
             throw new SimpleHBaseException(e);
         }
     }
-
+    
     /**
      * Get one HBaseAdmin.
      * */
@@ -163,6 +180,26 @@ public class HBaseDataSource {
 
 	public void setHbaseProperties(Properties hbaseProperties) {
 		this.hbaseProperties = hbaseProperties;
+	}
+
+	public HTableInterfaceFactory getTableFactory() {
+		return tableFactory;
+	}
+
+	public void setTableFactory(HTableInterfaceFactory tableFactory) {
+		this.tableFactory = tableFactory;
+	}
+
+	public HTablePool getTablePool() {
+		return tablePool;
+	}
+
+	public void setTablePool(HTablePool tablePool) {
+		this.tablePool = tablePool;
+	}
+
+	public void setTablePoolMaxSize(Integer tablePoolMaxSize) {
+		this.tablePoolMaxSize = tablePoolMaxSize;
 	}
 
 	@Override
