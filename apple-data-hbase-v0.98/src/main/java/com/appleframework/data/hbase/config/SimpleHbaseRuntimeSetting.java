@@ -86,8 +86,7 @@ public class SimpleHbaseRuntimeSetting {
         buildInLiteralInterpreterList.add(new HexBytesInterpreter());
 
         for (LiteralInterpreter interpreter : buildInLiteralInterpreterList) {
-            Class<?> type = ClassUtil.tryConvertToBoxClass(interpreter
-                    .getTypeCanInterpret());
+            Class<?> type = ClassUtil.tryConvertToBoxClass(interpreter.getTypeCanInterpret());
             buildInliteralInterpreterCache.put(type, interpreter);
         }
     }
@@ -124,8 +123,7 @@ public class SimpleHbaseRuntimeSetting {
         }
 
         if (buildInliteralInterpreterCache.containsKey(temType)) {
-            return buildInliteralInterpreterCache.get(temType).interpret(
-                    literalValue);
+            return buildInliteralInterpreterCache.get(temType).interpret(literalValue);
         }
 
         Object result = null;
@@ -144,13 +142,11 @@ public class SimpleHbaseRuntimeSetting {
         return new ArrayList<LiteralInterpreter>(tem.values());
     }
 
-    public void setLiteralInterpreterList(
-            List<LiteralInterpreter> literalInterpreterList) {
+    public void setLiteralInterpreterList(List<LiteralInterpreter> literalInterpreterList) {
         this.literalInterpreterList = literalInterpreterList;
         if (this.literalInterpreterList != null) {
             for (LiteralInterpreter interpreter : this.literalInterpreterList) {
-                Class<?> type = ClassUtil.tryConvertToBoxClass(interpreter
-                        .getTypeCanInterpret());
+                Class<?> type = ClassUtil.tryConvertToBoxClass(interpreter.getTypeCanInterpret());
                 literalInterpreterCache.put(type, interpreter);
             }
         }

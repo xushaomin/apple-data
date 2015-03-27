@@ -1,6 +1,6 @@
 <SimpleHbase>
 	
-	<HBaseTableSchema tableName="poi_history_v2" defaultFamily="info">
+	<HBaseTableSchema tableName="obd_multtrace_v2" defaultFamily="info">
 		<HBaseColumnSchema qualifier="sn" typeName="string" />
 		<HBaseColumnSchema qualifier="type" typeName="string" />
 		<HBaseColumnSchema qualifier="longitude" typeName="string" />
@@ -14,24 +14,6 @@
 		<HBaseColumnSchema qualifier="storageTime" typeName="string" />
 	</HBaseTableSchema>
 	
-	
-	<statements>	
-		
-		<statement id="queryByNameAndAge">
-			select where id greaterequal #id#
-			<isPropertyAvailable prepend="and" property="name">
-				name equal #name#
-			</isPropertyAvailable>
-			<isPropertyAvailable prepend="and" property="age">
-				age greater #age#
-			</isPropertyAvailable>
-		</statement>	
-		
-		<statement id="queryById">
-			select where id equal #id#			
-		</statement>			
-				
-	</statements>	
 </SimpleHbase>   
 
 
