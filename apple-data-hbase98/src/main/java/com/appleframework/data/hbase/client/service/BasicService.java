@@ -8,6 +8,7 @@ import com.appleframework.data.hbase.client.QueryExtInfo;
 import com.appleframework.data.hbase.client.RowKey;
 import com.appleframework.data.hbase.client.SimpleHbaseDOWithKeyResult;
 import com.appleframework.data.hbase.core.Nullable;
+import com.appleframework.data.hbase.page.Pagination;
 
 /**
  * BasicService
@@ -242,8 +243,7 @@ public interface BasicService {
      * 
      * @return POJO list.
      * */
-    public <T> List<T> findObjectBatch(List<RowKey> rowKeyList,
-            Class<? extends T> type);
+    public <T> List<T> findObjectBatch(List<RowKey> rowKeyList, Class<? extends T> type);
 
     /**
      * Find POJO and key in batch mode.
@@ -295,6 +295,132 @@ public interface BasicService {
      * @param type POJO type.
      * 
      * */
-    public void deleteObjectList(RowKey startRowKey, RowKey endRowKey,
-            Class<?> type);
+    public void deleteObjectList(RowKey startRowKey, RowKey endRowKey, Class<?> type);
+    
+    
+    //∑÷“≥≤È—Ø
+    
+    /**
+     * Find POJO and row key list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @return POJO and key list.
+     * */
+    public <T> Pagination<T> findPageAndKeyList(
+            RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
+            Integer pageNo, Integer pageSize);
+
+    /**
+     * Find POJO and row key list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param queryExtInfo queryExtInfo.
+     * 
+     * @return POJO and key list.
+     * */
+    public <T> Pagination<T> findPageAndKeyList(
+            RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
+            QueryExtInfo queryExtInfo,
+            Integer pageNo, Integer pageSize);
+
+    /**
+     * Dynamic query to find POJO and row key list with range in
+     * [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param id dynamic query id.
+     * @param para parameter map.
+     * 
+     * @return POJO and key list.
+     * */
+    public <T> Pagination<T> findPageAndKeyList(
+            RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
+            String id, @Nullable Map<String, Object> para,
+            Integer pageNo, Integer pageSize);
+
+    /**
+     * Dynamic query to find POJO and row key list with range in
+     * [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param id dynamic query id.
+     * @param para parameter map.
+     * @param queryExtInfo queryExtInfo.
+     * 
+     * @return POJO and key list.
+     * */
+    public <T> Pagination<T> findPageAndKeyList(
+            RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
+            String id, @Nullable Map<String, Object> para,
+            QueryExtInfo queryExtInfo,
+            Integer pageNo, Integer pageSize);
+    
+    
+    
+    /**
+     * Find POJO list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @return POJO list.
+     * */
+    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+            Class<? extends T> type,
+            Integer pageNo, Integer pageSize);
+
+    /**
+     * Find POJO list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param queryExtInfo queryExtInfo.
+     * 
+     * @return POJO list.
+     * */
+    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+            Class<? extends T> type, QueryExtInfo queryExtInfo,
+            Integer pageNo, Integer pageSize);
+
+    /**
+     * Dynamic query to find POJO list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param id dynamic query id.
+     * @param para parameter map.
+     * 
+     * @return POJO list.
+     * */
+    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+            Class<? extends T> type, String id,
+            @Nullable Map<String, Object> para,
+            Integer pageNo, Integer pageSize);
+
+    /**
+     * Dynamic query to find POJO list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param id dynamic query id.
+     * @param para parameter map.
+     * @param queryExtInfo queryExtInfo.
+     * 
+     * @return POJO list.
+     * */
+    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+            Class<? extends T> type, String id,
+            @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo,
+            Integer pageNo, Integer pageSize);
 }

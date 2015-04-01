@@ -60,7 +60,6 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
     	} catch (Exception e) {
 			
 		}
-    	
     }
 
     /**
@@ -132,9 +131,7 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
         }
 
         scan.setCaching(cachingSize);
-
         scan.setFilter(filter);
-
         return postConstructScan(scan);
     }
 
@@ -320,15 +317,12 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
 
                 byte[] hbaseValue = CellUtil.cloneValue(cell);
 
-                ColumnInfo columnInfo = typeInfo.findColumnInfo(familyStr,
-                        qualifierStr);
+                ColumnInfo columnInfo = typeInfo.findColumnInfo(familyStr, qualifierStr);
 
-                HBaseColumnSchema hbaseColumnSchema = columnSchema(
-                        columnInfo.family, columnInfo.qualifier);
+                HBaseColumnSchema hbaseColumnSchema = columnSchema(columnInfo.family, columnInfo.qualifier);
 
                 TypeHandler typeHandler = hbaseColumnSchema.getTypeHandler();
-                Object value = typeHandler.toObject(
-                        hbaseColumnSchema.getType(), hbaseValue);
+                Object value = typeHandler.toObject(hbaseColumnSchema.getType(), hbaseValue);
 
                 if (value != null) {
                     columnInfo.field.set(result, value);
@@ -340,8 +334,7 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
 
             byte[] row = CellUtil.cloneRow(cells[0]);
 
-            rowKeyHandler = hbaseTableConfig.getHbaseTableSchema()
-                    .getRowKeyHandler();
+            rowKeyHandler = hbaseTableConfig.getHbaseTableSchema().getRowKeyHandler();
             RowKey rowKey = rowKeyHandler.convert(row);
 
             SimpleHbaseDOWithKeyResult<T> pojoWithKey = new SimpleHbaseDOWithKeyResult<T>();
@@ -376,8 +369,7 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
             return new ArrayList<SimpleHbaseDOResult<T>>();
         }
 
-        TreeMap<Long, T> temMap = new TreeMap<Long, T>(
-                Collections.reverseOrder());
+        TreeMap<Long, T> temMap = new TreeMap<Long, T>(Collections.reverseOrder());
 
         TypeInfo typeInfo = findTypeInfo(type);
 
@@ -401,15 +393,12 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
                     temMap.put(ts, type.newInstance());
                 }
 
-                ColumnInfo columnInfo = typeInfo.findColumnInfo(familyStr,
-                        qualifierStr);
+                ColumnInfo columnInfo = typeInfo.findColumnInfo(familyStr, qualifierStr);
 
-                HBaseColumnSchema hbaseColumnSchema = columnSchema(
-                        columnInfo.family, columnInfo.qualifier);
+                HBaseColumnSchema hbaseColumnSchema = columnSchema(columnInfo.family, columnInfo.qualifier);
 
                 TypeHandler typeHandler = hbaseColumnSchema.getTypeHandler();
-                Object value = typeHandler.toObject(
-                        hbaseColumnSchema.getType(), hbaseValue);
+                Object value = typeHandler.toObject(hbaseColumnSchema.getType(), hbaseValue);
 
                 if (value != null) {
                     columnInfo.field.set(temMap.get(ts), value);
@@ -421,8 +410,7 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
 
             byte[] row = CellUtil.cloneRow(cells[0]);
 
-            rowKeyHandler = hbaseTableConfig.getHbaseTableSchema()
-                    .getRowKeyHandler();
+            rowKeyHandler = hbaseTableConfig.getHbaseTableSchema().getRowKeyHandler();
             RowKey rowKey = rowKeyHandler.convert(row);
 
             List<SimpleHbaseDOResult<T>> result = new ArrayList<SimpleHbaseDOResult<T>>();
@@ -460,16 +448,14 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
      * Convert value to bytes.
      * */
     protected byte[] convertValueToBytes(Object value, ColumnInfo columnInfo) {
-        HBaseColumnSchema hbaseColumnSchema = columnSchema(columnInfo.family,
-                columnInfo.qualifier);
+        HBaseColumnSchema hbaseColumnSchema = columnSchema(columnInfo.family, columnInfo.qualifier);
         return convertValueToBytes(value, hbaseColumnSchema);
     }
 
     /**
      * Convert value to bytes.
      * */
-    protected byte[] convertValueToBytes(Object value,
-            HBaseColumnSchema hbaseColumnSchema) {
+    protected byte[] convertValueToBytes(Object value, HBaseColumnSchema hbaseColumnSchema) {
         TypeHandler typeHandler = hbaseColumnSchema.getTypeHandler();
         return typeHandler.toBytes(hbaseColumnSchema.getType(), value);
     }
@@ -480,8 +466,7 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
     protected void checkVersioned(TypeInfo typeInfo) {
 
         if (!typeInfo.isVersionedType()) {
-            throw new SimpleHBaseException("not a versioned type. typeInfo = "
-                    + typeInfo);
+            throw new SimpleHBaseException("not a versioned type. typeInfo = " + typeInfo);
         }
     }
 
@@ -489,8 +474,7 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
      * Check for table name.
      * */
     protected void checkTableName(String tableName) {
-        Util.checkEquals(tableName, hbaseTableConfig.getHbaseTableSchema()
-                .getTableName());
+        Util.checkEquals(tableName, hbaseTableConfig.getHbaseTableSchema().getTableName());
     }
 
     /**
@@ -531,8 +515,7 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
     }
 
     @Override
-    public void setSimpleHbaseRuntimeSetting(
-            SimpleHbaseRuntimeSetting simpleHbaseRuntimeSetting) {
+    public void setSimpleHbaseRuntimeSetting(SimpleHbaseRuntimeSetting simpleHbaseRuntimeSetting) {
         this.simpleHbaseRuntimeSetting = simpleHbaseRuntimeSetting;
     }
 

@@ -36,6 +36,7 @@ import com.appleframework.data.hbase.config.HBaseColumnSchema;
 import com.appleframework.data.hbase.core.Nullable;
 import com.appleframework.data.hbase.exception.SimpleHBaseException;
 import com.appleframework.data.hbase.hql.HBaseQuery;
+import com.appleframework.data.hbase.page.Pagination;
 import com.appleframework.data.hbase.util.StringUtil;
 import com.appleframework.data.hbase.util.Util;
 
@@ -151,28 +152,23 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     @Override
     public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, QueryExtInfo queryExtInfo) {
-        return unwrap(findObjectAndKeyList(startRowKey, endRowKey, type,
-                queryExtInfo));
+        return unwrap(findObjectAndKeyList(startRowKey, endRowKey, type, queryExtInfo));
     }
 
     @Override
     public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey,
-            Class<? extends T> type, String id,
-            @Nullable Map<String, Object> para) {
-        return unwrap(findObjectAndKeyList(startRowKey, endRowKey, type, id,
-                para));
+            Class<? extends T> type, String id, @Nullable Map<String, Object> para) {
+        return unwrap(findObjectAndKeyList(startRowKey, endRowKey, type, id, para));
     }
 
     @Override
     public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, String id,
             @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo) {
-        return unwrap(findObjectAndKeyList(startRowKey, endRowKey, type, id,
-                para, queryExtInfo));
+        return unwrap(findObjectAndKeyList(startRowKey, endRowKey, type, id, para, queryExtInfo));
     }
 
-    private <T> List<T> unwrap(
-            List<SimpleHbaseDOWithKeyResult<T>> simpleHbaseDOWithKeyResultList) {
+    private <T> List<T> unwrap(List<SimpleHbaseDOWithKeyResult<T>> simpleHbaseDOWithKeyResultList) {
         List<T> resultList = new ArrayList<T>();
         if (!simpleHbaseDOWithKeyResultList.isEmpty()) {
             for (SimpleHbaseDOWithKeyResult<T> t : simpleHbaseDOWithKeyResultList) {
@@ -192,16 +188,14 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             QueryExtInfo queryExtInfo) {
-        return findObjectAndKeyList_internal(startRowKey, endRowKey, type,
-                null, queryExtInfo);
+        return findObjectAndKeyList_internal(startRowKey, endRowKey, type, null, queryExtInfo);
     }
 
     @Override
     public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, Map<String, Object> para) {
-        return findObjectAndKeyList(startRowKey, endRowKey, type, id, para,
-                null);
+        return findObjectAndKeyList(startRowKey, endRowKey, type, id, para, null);
     }
 
     @Override
@@ -209,8 +203,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, Map<String, Object> para, QueryExtInfo queryExtInfo) {
         Filter filter = parseSelectFilter(id, para);
-        return findObjectAndKeyList_internal(startRowKey, endRowKey, type,
-                filter, queryExtInfo);
+        return findObjectAndKeyList_internal(startRowKey, endRowKey, type, filter, queryExtInfo);
     }
 
     private <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList_internal(
@@ -236,8 +229,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             }
             if (queryExtInfo.isTimeRangeSet()) {
                 try {
-                    scan.setTimeRange(queryExtInfo.getMinStamp(),
-                            queryExtInfo.getMaxStamp());
+                    scan.setTimeRange(queryExtInfo.getMinStamp(), queryExtInfo.getMaxStamp());
                 } catch (IOException e) {
                     // should never happen.
                     throw new SimpleHBaseException("should never happen.", e);
@@ -266,8 +258,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                     continue;
                 }
 
-                SimpleHbaseDOWithKeyResult<T> t = convertToSimpleHbaseDOWithKeyResult(
-                        result, type);
+                SimpleHbaseDOWithKeyResult<T> t = convertToSimpleHbaseDOWithKeyResult(result, type);
                 if (t != null) {
                     resultList.add(t);
                     if (++resultCounter >= length) {
@@ -289,8 +280,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     }
 
     @Override
-    public <T> List<T> findObjectBatch(List<RowKey> rowKeyList,
-            Class<? extends T> type) {
+    public <T> List<T> findObjectBatch(List<RowKey> rowKeyList, Class<? extends T> type) {
         return unwrap(findObjectAndKeyBatch(rowKeyList, type));
     }
 
@@ -411,8 +401,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             }
             if (queryExtInfo.isTimeRangeSet()) {
                 try {
-                    scan.setTimeRange(queryExtInfo.getMinStamp(),
-                            queryExtInfo.getMaxStamp());
+                    scan.setTimeRange(queryExtInfo.getMinStamp(), queryExtInfo.getMaxStamp());
                 } catch (IOException e) {
                     // should never happen.
                     throw new SimpleHBaseException("should never happen.", e);
@@ -1134,5 +1123,180 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             }
         }
     }
+    
+    
+    //分页查询
+    @Override
+    public <T> Pagination<T> findPageAndKeyList(
+            RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
+            Integer pageNo, Integer pageSize) {
+        return findPageAndKeyList(startRowKey, endRowKey, type, null, pageNo, pageSize);
+    }
 
+    @Override
+    public <T> Pagination<T> findPageAndKeyList(
+            RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
+            QueryExtInfo queryExtInfo, 
+            Integer pageNo, Integer pageSize) {
+        return findPageAndKeyList_internal(startRowKey, endRowKey, type,
+                null, queryExtInfo, pageNo, pageSize);
+    }
+
+    @Override
+    public <T> Pagination<T> findPageAndKeyList(
+            RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
+            String id, Map<String, Object> para,
+            Integer pageNo, Integer pageSize) {
+        return findPageAndKeyList(startRowKey, endRowKey, type, id, para,
+                null, pageNo, pageSize);
+    }
+
+    @Override
+    public <T> Pagination<T> findPageAndKeyList(
+            RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
+            String id, Map<String, Object> para, QueryExtInfo queryExtInfo,
+            Integer pageNo, Integer pageSize) {
+        Filter filter = parseSelectFilter(id, para);
+        return findPageAndKeyList_internal(startRowKey, endRowKey, type, filter, queryExtInfo, pageNo, pageSize);
+    }
+    
+    @SuppressWarnings("unchecked")
+	private <T> Pagination<T> findPageAndKeyList_internal(
+            RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
+            @Nullable Filter filter, @Nullable QueryExtInfo queryExtInfo, 
+            Integer pageNo, Integer pageSize) {
+        Util.checkRowKey(startRowKey);
+        Util.checkRowKey(endRowKey);
+        Util.checkNull(type);
+        
+        Pagination<T> page = null;
+		// 获取最大返回结果数量
+		if (pageSize == null || pageSize == 0L)
+			pageSize = 100;
+
+		if (pageNo == null || pageNo == 0)
+			pageNo = 1;
+
+		// 计算起始页和结束页
+		Integer firstPage = (pageNo - 1) * pageSize;
+		Integer endPage = firstPage + pageSize;
+
+        Scan scan = constructScan(startRowKey, endRowKey, filter, queryExtInfo);
+
+        //only query 1 version.
+        if (queryExtInfo != null) {
+            queryExtInfo.setMaxVersions(1);
+        }
+
+        long startIndex = 0L;
+        long length = Long.MAX_VALUE;
+
+        if (queryExtInfo != null) {
+            if (queryExtInfo.isMaxVersionSet()) {
+                scan.setMaxVersions(queryExtInfo.getMaxVersions());
+            }
+            if (queryExtInfo.isTimeRangeSet()) {
+                try {
+                    scan.setTimeRange(queryExtInfo.getMinStamp(), queryExtInfo.getMaxStamp());
+                } catch (IOException e) {
+                    // should never happen.
+                    throw new SimpleHBaseException("should never happen.", e);
+                }
+            }
+            if (queryExtInfo.isLimitSet()) {
+                startIndex = queryExtInfo.getStartIndex();
+                length = queryExtInfo.getLength();
+            }
+        }
+
+        applyRequestFamilyAndQualifier(type, scan);
+
+        HTableInterface htableInterface = htableInterface();
+        ResultScanner resultScanner = null;
+        int totalCount = 0;
+        
+        List<SimpleHbaseDOWithKeyResult<T>> resultList = new ArrayList<SimpleHbaseDOWithKeyResult<T>>();
+
+        try {
+            resultScanner = htableInterface.getScanner(scan);
+            long ignoreCounter = startIndex;
+            long resultCounter = 0L;
+            Result result = null;
+            while ((result = resultScanner.next()) != null) {
+                if (ignoreCounter-- > 0) {
+                    continue;
+                }
+
+                if (totalCount >= firstPage && totalCount < endPage) {
+					SimpleHbaseDOWithKeyResult<T> t = convertToSimpleHbaseDOWithKeyResult(result, type);
+	                if (t != null) {
+	                    resultList.add(t);
+	                    if (++resultCounter >= length) {
+	                        break;
+	                    }
+	                }
+				}
+                totalCount ++;
+            }
+            // 封装分页对象
+            page = new Pagination<T>(pageNo, pageSize, totalCount);
+         	page.setList((List<T>) resultList);
+        } catch (IOException e) {
+        	page = new Pagination<T>(pageNo, pageSize, 0);
+            throw new SimpleHBaseException(
+                    "findPageAndKeyList_internal. startRowKey=" + startRowKey
+                            + " endRowKey=" + endRowKey + " type=" + type, e);
+        } finally {
+            //Util.close(resultScanner);
+            Util.close(htableInterface);
+            closeHTable(htableInterface);
+        }
+
+        return page;
+    }
+    
+    
+    @Override
+    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+            Class<? extends T> type,
+            Integer pageNo, Integer pageSize) {
+        return unwrap(findPageAndKeyList(startRowKey, endRowKey, type, pageNo, pageSize));
+    }
+
+    @Override
+    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+            Class<? extends T> type, QueryExtInfo queryExtInfo,
+            Integer pageNo, Integer pageSize) {
+        return unwrap(findPageAndKeyList(startRowKey, endRowKey, type, queryExtInfo, pageNo, pageSize));
+    }
+
+    @Override
+    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+            Class<? extends T> type, String id, @Nullable Map<String, Object> para,
+            Integer pageNo, Integer pageSize) {
+        return unwrap(findPageAndKeyList(startRowKey, endRowKey, type, id, para, pageNo, pageSize));
+    }
+
+    @Override
+    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+            Class<? extends T> type, String id,
+            @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo,
+            Integer pageNo, Integer pageSize) {
+        return unwrap(findPageAndKeyList(startRowKey, endRowKey, type, id, para, queryExtInfo, pageNo, pageSize));
+    }
+
+    
+    @SuppressWarnings("unchecked")
+	private <T> Pagination<T> unwrap(Pagination<T> page) {
+    	List<SimpleHbaseDOWithKeyResult<T>> simpleHbaseDOWithKeyResultList 
+    			= (List<SimpleHbaseDOWithKeyResult<T>>) page.getList();
+        List<T> resultList = new ArrayList<T>();
+        if (!simpleHbaseDOWithKeyResultList.isEmpty()) {
+            for (SimpleHbaseDOWithKeyResult<T> t : simpleHbaseDOWithKeyResultList) {
+                resultList.add(unwrap(t));
+            }
+        }
+        page.setList(resultList);
+        return page;
+    }
 }
