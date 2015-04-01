@@ -1129,7 +1129,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     @Override
     public <T> Pagination<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
-            Integer pageNo, Integer pageSize) {
+            long pageNo, long pageSize) {
         return findPageAndKeyList(startRowKey, endRowKey, type, null, pageNo, pageSize);
     }
 
@@ -1137,7 +1137,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     public <T> Pagination<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             QueryExtInfo queryExtInfo, 
-            Integer pageNo, Integer pageSize) {
+            long pageNo, long pageSize) {
         return findPageAndKeyList_internal(startRowKey, endRowKey, type,
                 null, queryExtInfo, pageNo, pageSize);
     }
@@ -1146,7 +1146,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     public <T> Pagination<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, Map<String, Object> para,
-            Integer pageNo, Integer pageSize) {
+            long pageNo, long pageSize) {
         return findPageAndKeyList(startRowKey, endRowKey, type, id, para,
                 null, pageNo, pageSize);
     }
@@ -1155,7 +1155,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     public <T> Pagination<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, Map<String, Object> para, QueryExtInfo queryExtInfo,
-            Integer pageNo, Integer pageSize) {
+            long pageNo, long pageSize) {
         Filter filter = parseSelectFilter(id, para);
         return findPageAndKeyList_internal(startRowKey, endRowKey, type, filter, queryExtInfo, pageNo, pageSize);
     }
@@ -1164,22 +1164,22 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 	private <T> Pagination<T> findPageAndKeyList_internal(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             @Nullable Filter filter, @Nullable QueryExtInfo queryExtInfo, 
-            Integer pageNo, Integer pageSize) {
+            long pageNo, long pageSize) {
         Util.checkRowKey(startRowKey);
         Util.checkRowKey(endRowKey);
         Util.checkNull(type);
         
         Pagination<T> page = null;
 		// 获取最大返回结果数量
-		if (pageSize == null || pageSize == 0L)
+		if (pageSize <= 0)
 			pageSize = 100;
 
-		if (pageNo == null || pageNo == 0)
+		if (pageNo <= 0)
 			pageNo = 1;
 
 		// 计算起始页和结束页
-		Integer firstPage = (pageNo - 1) * pageSize;
-		Integer endPage = firstPage + pageSize;
+		long firstPage = (pageNo - 1) * pageSize;
+		long endPage = firstPage + pageSize;
 
         Scan scan = constructScan(startRowKey, endRowKey, filter, queryExtInfo);
 
@@ -1259,21 +1259,21 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     @Override
     public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type,
-            Integer pageNo, Integer pageSize) {
+            long pageNo, long pageSize) {
         return unwrap(findPageAndKeyList(startRowKey, endRowKey, type, pageNo, pageSize));
     }
 
     @Override
     public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, QueryExtInfo queryExtInfo,
-            Integer pageNo, Integer pageSize) {
+            long pageNo, long pageSize) {
         return unwrap(findPageAndKeyList(startRowKey, endRowKey, type, queryExtInfo, pageNo, pageSize));
     }
 
     @Override
     public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, String id, @Nullable Map<String, Object> para,
-            Integer pageNo, Integer pageSize) {
+            long pageNo, long pageSize) {
         return unwrap(findPageAndKeyList(startRowKey, endRowKey, type, id, para, pageNo, pageSize));
     }
 
@@ -1281,7 +1281,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, String id,
             @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo,
-            Integer pageNo, Integer pageSize) {
+            long pageNo, long pageSize) {
         return unwrap(findPageAndKeyList(startRowKey, endRowKey, type, id, para, queryExtInfo, pageNo, pageSize));
     }
 

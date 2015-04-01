@@ -310,7 +310,7 @@ public interface BasicService {
      * */
     public <T> Pagination<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
-            Integer pageNo, Integer pageSize);
+            long pageNo, long pageSize);
 
     /**
      * Find POJO and row key list with range in [startRowKey,endRowKey).
@@ -325,7 +325,7 @@ public interface BasicService {
     public <T> Pagination<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             QueryExtInfo queryExtInfo,
-            Integer pageNo, Integer pageSize);
+            long pageNo, long pageSize);
 
     /**
      * Dynamic query to find POJO and row key list with range in
@@ -342,7 +342,7 @@ public interface BasicService {
     public <T> Pagination<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, @Nullable Map<String, Object> para,
-            Integer pageNo, Integer pageSize);
+            long pageNo, long pageSize);
 
     /**
      * Dynamic query to find POJO and row key list with range in
@@ -361,7 +361,7 @@ public interface BasicService {
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, @Nullable Map<String, Object> para,
             QueryExtInfo queryExtInfo,
-            Integer pageNo, Integer pageSize);
+            long pageNo, long pageSize);
     
     
     
@@ -375,7 +375,7 @@ public interface BasicService {
      * */
     public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type,
-            Integer pageNo, Integer pageSize);
+            long pageNo, long pageSize);
 
     /**
      * Find POJO list with range in [startRowKey,endRowKey).
@@ -389,7 +389,7 @@ public interface BasicService {
      * */
     public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, QueryExtInfo queryExtInfo,
-            Integer pageNo, Integer pageSize);
+            long pageNo, long pageSize);
 
     /**
      * Dynamic query to find POJO list with range in [startRowKey,endRowKey).
@@ -405,7 +405,7 @@ public interface BasicService {
     public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, String id,
             @Nullable Map<String, Object> para,
-            Integer pageNo, Integer pageSize);
+            long pageNo, long pageSize);
 
     /**
      * Dynamic query to find POJO list with range in [startRowKey,endRowKey).
@@ -422,5 +422,5 @@ public interface BasicService {
     public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, String id,
             @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo,
-            Integer pageNo, Integer pageSize);
+            long pageNo, long pageSize);
 }
