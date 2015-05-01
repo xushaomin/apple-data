@@ -1,5 +1,6 @@
 package com.appleframework.data.hbase;
 
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.springframework.data.hadoop.hbase.HbaseTemplate;
 
@@ -22,6 +23,6 @@ public interface PageExtractor<T> {
 	 * @return an arbitrary result object, or null if none (the extractor will typically be stateful in the latter case). 
 	 * @throws Exception if an Hbase exception is encountered
 	 */
-	Pagination<T> extractData(ResultScanner results, long pageNo, long pageSize) throws Exception;
+	Pagination<T> extractData(ResultScanner results, HTableInterface htable, long pageNo, long pageSize) throws Exception;
 }
 

@@ -1,5 +1,6 @@
 package com.appleframework.data.hbase;
 
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.springframework.data.hadoop.hbase.HbaseTemplate;
 
@@ -20,7 +21,7 @@ public interface ResultsExtractor<T> {
 	 * @return an arbitrary result object, or null if none (the extractor will typically be stateful in the latter case). 
 	 * @throws Exception if an Hbase exception is encountered
 	 */
-	T extractData(ResultScanner results) throws Exception;
+	T extractData(ResultScanner results, HTableInterface htable) throws Exception;
 	
 }
 

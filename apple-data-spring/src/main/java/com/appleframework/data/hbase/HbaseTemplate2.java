@@ -155,7 +155,7 @@ public class HbaseTemplate2 extends HbaseAccessor implements HbaseOperations {
 			public T doInTable(HTableInterface htable) throws Throwable {
 				ResultScanner scanner = htable.getScanner(scan);
 				try {
-					return action.extractData(scanner);
+					return action.extractData(scanner, htable);
 				} finally {
 					scanner.close();
 				}
@@ -171,7 +171,7 @@ public class HbaseTemplate2 extends HbaseAccessor implements HbaseOperations {
 			public Pagination<T> doInPage(HTableInterface htable) throws Throwable {
 				ResultScanner scanner = htable.getScanner(scan);
 				try {
-					return action.extractData(scanner, pageNo, pageSize);
+					return action.extractData(scanner, htable, pageNo, pageSize);
 				} finally {
 					scanner.close();
 				}
