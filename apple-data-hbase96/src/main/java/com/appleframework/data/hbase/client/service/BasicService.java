@@ -3,12 +3,12 @@ package com.appleframework.data.hbase.client.service;
 import java.util.List;
 import java.util.Map;
 
+import com.appleframework.data.core.page.Pagination;
 import com.appleframework.data.hbase.client.PutRequest;
 import com.appleframework.data.hbase.client.QueryExtInfo;
 import com.appleframework.data.hbase.client.RowKey;
 import com.appleframework.data.hbase.client.SimpleHbaseDOWithKeyResult;
 import com.appleframework.data.hbase.core.Nullable;
-import com.appleframework.data.hbase.page.Pagination;
 
 /**
  * BasicService

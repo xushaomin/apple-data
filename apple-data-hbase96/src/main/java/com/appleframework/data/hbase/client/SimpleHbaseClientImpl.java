@@ -19,6 +19,7 @@ import org.apache.hadoop.hbase.client.Scan;
 
 import org.apache.hadoop.hbase.filter.Filter;
 
+import com.appleframework.data.core.page.Pagination;
 import com.appleframework.data.hbase.antlr.auto.StatementsParser.Constant2Context;
 
 import com.appleframework.data.hbase.antlr.auto.StatementsParser.DeletehqlcContext;
@@ -36,7 +37,6 @@ import com.appleframework.data.hbase.config.HBaseColumnSchema;
 import com.appleframework.data.hbase.core.Nullable;
 import com.appleframework.data.hbase.exception.SimpleHBaseException;
 import com.appleframework.data.hbase.hql.HBaseQuery;
-import com.appleframework.data.hbase.page.Pagination;
 import com.appleframework.data.hbase.util.StringUtil;
 import com.appleframework.data.hbase.util.Util;
 
