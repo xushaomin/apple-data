@@ -6,14 +6,13 @@
 	<parent>
 		<groupId>com.appleframework.data</groupId>
 		<artifactId>apple-data</artifactId>
-		<version>0.0.5.RELEASE</version>
+		<version>0.0.6.RELEASE</version>
 	</parent>
 	<artifactId>apple-data-hbase98</artifactId>
 	<name>apple-data-hbase98</name>
 	<url>http://mvnrepo.appleframework.com</url>
 	
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<hbase.version>0.98.8-hadoop2</hbase.version>
 		<hadoop.version>2.2.0</hadoop.version>
 		<spring.version>4.0.5.RELEASE</spring.version>
@@ -22,6 +21,12 @@
 	
 	<dependencies>
 
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>apple-data-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-client</artifactId>
