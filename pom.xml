@@ -3,13 +3,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.appleframework.data</groupId>
 	<artifactId>apple-data</artifactId>
-	<version>0.0.5.RELEASE</version>
+	<version>0.0.6.RELEASE</version>
 	<packaging>pom</packaging>
 	
 	<modules>
+		<module>apple-data-core</module>
 		<module>apple-data-hbase96</module>
     	<module>apple-data-hbase98</module>
-  	</modules>
+    	<module>apple-data-spring</module>
+	</modules>
 
 	<build>
 		<plugins>
