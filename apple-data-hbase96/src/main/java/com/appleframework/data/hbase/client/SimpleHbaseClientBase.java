@@ -133,6 +133,20 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
         scan.setFilter(filter);
         return postConstructScan(scan);
     }
+    
+    /**
+     * Construct Scan.
+     * */
+    protected Scan constructScan(RowKey startRowKey, long pageSize, @Nullable Filter filter, @Nullable QueryExtInfo queryExtInfo) {
+        Util.checkRowKey(startRowKey);
+
+        Scan scan = new Scan();
+        scan.setStartRow(startRowKey.toBytes());
+
+        scan.setCaching((int)pageSize);
+        scan.setFilter(filter);
+        return postConstructScan(scan);
+    }
 
     /**
      * Post construct Scan.

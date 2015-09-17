@@ -123,6 +123,64 @@ public interface BasicService {
     public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, String id,
             @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo);
+    
+    
+    //
+    /**
+     * Find POJO list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @return POJO list.
+     * */
+    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
+            Class<? extends T> type);
+
+    /**
+     * Find POJO list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param queryExtInfo queryExtInfo.
+     * 
+     * @return POJO list.
+     * */
+    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
+            Class<? extends T> type, QueryExtInfo queryExtInfo);
+
+    /**
+     * Dynamic query to find POJO list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param id dynamic query id.
+     * @param para parameter map.
+     * 
+     * @return POJO list.
+     * */
+    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
+            Class<? extends T> type, String id,
+            @Nullable Map<String, Object> para);
+
+    /**
+     * Dynamic query to find POJO list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param id dynamic query id.
+     * @param para parameter map.
+     * @param queryExtInfo queryExtInfo.
+     * 
+     * @return POJO list.
+     * */
+    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
+            Class<? extends T> type, String id,
+            @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo);
+    //
 
     /**
      * Find object and row key with row key.
@@ -234,6 +292,68 @@ public interface BasicService {
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, @Nullable Map<String, Object> para,
             QueryExtInfo queryExtInfo);
+    
+    
+    //
+    /**
+     * Find POJO and row key list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @return POJO and key list.
+     * */
+    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
+            RowKey startRowKey, long pageSize, Class<? extends T> type);
+
+    /**
+     * Find POJO and row key list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param queryExtInfo queryExtInfo.
+     * 
+     * @return POJO and key list.
+     * */
+    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
+            RowKey startRowKey, long pageSize, Class<? extends T> type,
+            QueryExtInfo queryExtInfo);
+
+    /**
+     * Dynamic query to find POJO and row key list with range in
+     * [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param id dynamic query id.
+     * @param para parameter map.
+     * 
+     * @return POJO and key list.
+     * */
+    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
+            RowKey startRowKey, long pageSize, Class<? extends T> type,
+            String id, @Nullable Map<String, Object> para);
+
+    /**
+     * Dynamic query to find POJO and row key list with range in
+     * [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param id dynamic query id.
+     * @param para parameter map.
+     * @param queryExtInfo queryExtInfo.
+     * 
+     * @return POJO and key list.
+     * */
+    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
+            RowKey startRowKey, long pageSize, Class<? extends T> type,
+            String id, @Nullable Map<String, Object> para,
+            QueryExtInfo queryExtInfo);
+    //
 
     /**
      * Find POJO in batch mode.

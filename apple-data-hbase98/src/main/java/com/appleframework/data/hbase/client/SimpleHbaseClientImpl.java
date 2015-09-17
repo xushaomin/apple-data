@@ -142,6 +142,33 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         }
 
     }
+    
+    //
+    @Override
+    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
+            Class<? extends T> type) {
+        return unwrap(findObjectAndKeyList(startRowKey, pageSize, type));
+    }
+
+    @Override
+    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
+            Class<? extends T> type, QueryExtInfo queryExtInfo) {
+        return unwrap(findObjectAndKeyList(startRowKey, pageSize, type, queryExtInfo));
+    }
+
+    @Override
+    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
+            Class<? extends T> type, String id, @Nullable Map<String, Object> para) {
+        return unwrap(findObjectAndKeyList(startRowKey, pageSize, type, id, para));
+    }
+
+    @Override
+    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
+            Class<? extends T> type, String id,
+            @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo) {
+        return unwrap(findObjectAndKeyList(startRowKey, pageSize, type, id, para, queryExtInfo));
+    }
+    //
 
     @Override
     public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey,
@@ -200,11 +227,41 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 
     @Override
     public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
+            RowKey startRowKey, long pageSize, Class<? extends T> type,
+            String id, Map<String, Object> para, QueryExtInfo queryExtInfo) {
+        Filter filter = parseSelectFilter(id, para);
+        return findObjectAndKeyList_internal(startRowKey, pageSize, type, filter, queryExtInfo);
+    }
+    
+    //
+    @Override
+    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
+            RowKey startRowKey, long pageSize, Class<? extends T> type) {
+        return findObjectAndKeyList(startRowKey, pageSize, type, null);
+    }
+
+    @Override
+    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
+            RowKey startRowKey, long pageSize, Class<? extends T> type,
+            QueryExtInfo queryExtInfo) {
+        return findObjectAndKeyList_internal(startRowKey, pageSize, type, null, queryExtInfo);
+    }
+
+    @Override
+    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
+            RowKey startRowKey, long pageSize, Class<? extends T> type,
+            String id, Map<String, Object> para) {
+        return findObjectAndKeyList(startRowKey, pageSize, type, id, para, null);
+    }
+
+    @Override
+    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, Map<String, Object> para, QueryExtInfo queryExtInfo) {
         Filter filter = parseSelectFilter(id, para);
         return findObjectAndKeyList_internal(startRowKey, endRowKey, type, filter, queryExtInfo);
     }
+    //
 
     private <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList_internal(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
@@ -270,6 +327,77 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             throw new SimpleHBaseException(
                     "findObjectAndKeyList_internal. startRowKey=" + startRowKey
                             + " endRowKey=" + endRowKey + " type=" + type, e);
+        } finally {
+            //Util.close(resultScanner);
+            Util.close(htableInterface);
+            closeHTable(htableInterface);
+        }
+
+        return resultList;
+    }
+    
+    private <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList_internal(
+            RowKey startRowKey, long pageSize, Class<? extends T> type,
+            @Nullable Filter filter, @Nullable QueryExtInfo queryExtInfo) {
+        Util.checkRowKey(startRowKey);
+        Util.checkNull(type);
+
+        Scan scan = constructScan(startRowKey, pageSize, filter, queryExtInfo);
+
+        //only query 1 version.
+        if (queryExtInfo != null) {
+            queryExtInfo.setMaxVersions(1);
+        }
+
+        long startIndex = 0L;
+        long length = pageSize;
+
+        if (queryExtInfo != null) {
+            if (queryExtInfo.isMaxVersionSet()) {
+                scan.setMaxVersions(queryExtInfo.getMaxVersions());
+            }
+            if (queryExtInfo.isTimeRangeSet()) {
+                try {
+                    scan.setTimeRange(queryExtInfo.getMinStamp(), queryExtInfo.getMaxStamp());
+                } catch (IOException e) {
+                    // should never happen.
+                    throw new SimpleHBaseException("should never happen.", e);
+                }
+            }
+            if (queryExtInfo.isLimitSet()) {
+                startIndex = queryExtInfo.getStartIndex();
+                length = queryExtInfo.getLength();
+            }
+        }
+
+        applyRequestFamilyAndQualifier(type, scan);
+
+        HTableInterface htableInterface = htableInterface();
+        ResultScanner resultScanner = null;
+
+        List<SimpleHbaseDOWithKeyResult<T>> resultList = new ArrayList<SimpleHbaseDOWithKeyResult<T>>();
+
+        try {
+            resultScanner = htableInterface.getScanner(scan);
+            long ignoreCounter = startIndex;
+            long resultCounter = 0L;
+            Result result = null;
+            while ((result = resultScanner.next()) != null) {
+                if (ignoreCounter-- > 0) {
+                    continue;
+                }
+
+                SimpleHbaseDOWithKeyResult<T> t = convertToSimpleHbaseDOWithKeyResult(result, type);
+                if (t != null) {
+                    resultList.add(t);
+                    if (++resultCounter >= length) {
+                        break;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new SimpleHBaseException(
+                    "findObjectAndKeyList_internal. startRowKey=" + startRowKey + " pageSize=" + pageSize + " type=" + type, e);
         } finally {
             //Util.close(resultScanner);
             Util.close(htableInterface);
@@ -347,8 +475,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                     get.setMaxVersions(queryExtInfo.getMaxVersions());
                 }
                 if (queryExtInfo.isTimeRangeSet()) {
-                    get.setTimeRange(queryExtInfo.getMinStamp(),
-                            queryExtInfo.getMaxStamp());
+                    get.setTimeRange(queryExtInfo.getMinStamp(), queryExtInfo.getMaxStamp());
                 }
             }
 
@@ -357,8 +484,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             return convertToSimpleHbaseDOResult(htableInterface.get(get), type);
 
         } catch (IOException e) {
-            throw new SimpleHBaseException("findObject_internal_mv. rowKey="
-                    + rowKey + " type=" + type, e);
+            throw new SimpleHBaseException("findObject_internal_mv. rowKey=" + rowKey + " type=" + type, e);
         } finally {
         	closeHTable(htableInterface);
             //Util.close(htableInterface);
@@ -369,8 +495,14 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     public <T> List<List<SimpleHbaseDOResult<T>>> findObjectListMV(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             QueryExtInfo queryExtInfo) {
-        return findObjectList_internal_mv(startRowKey, endRowKey, type, null,
-                queryExtInfo);
+        return findObjectList_internal_mv(startRowKey, endRowKey, type, null, queryExtInfo);
+    }
+    
+    @Override
+    public <T> List<List<SimpleHbaseDOResult<T>>> findObjectListMV(
+            RowKey startRowKey, long pageSize, Class<? extends T> type,
+            QueryExtInfo queryExtInfo) {
+        return findObjectList_internal_mv(startRowKey, pageSize, type, null, queryExtInfo);
     }
 
     @Override
@@ -379,8 +511,16 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             String id, Map<String, Object> para, QueryExtInfo queryExtInfo) {
 
         Filter filter = parseSelectFilter(id, para);
-        return findObjectList_internal_mv(startRowKey, endRowKey, type, filter,
-                queryExtInfo);
+        return findObjectList_internal_mv(startRowKey, endRowKey, type, filter, queryExtInfo);
+    }
+    
+    @Override
+    public <T> List<List<SimpleHbaseDOResult<T>>> findObjectListMV(
+            RowKey startRowKey, long pageSize, Class<? extends T> type,
+            String id, Map<String, Object> para, QueryExtInfo queryExtInfo) {
+
+        Filter filter = parseSelectFilter(id, para);
+        return findObjectList_internal_mv(startRowKey, pageSize, type, filter, queryExtInfo);
     }
 
     private <T> List<List<SimpleHbaseDOResult<T>>> findObjectList_internal_mv(
@@ -439,8 +579,72 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             }
         } catch (IOException e) {
             throw new SimpleHBaseException(
-                    "findObjectList_internal_mv. startRowKey=" + startRowKey
-                            + " endRowKey=" + endRowKey + " type=" + type, e);
+                    "findObjectList_internal_mv. startRowKey=" + startRowKey + " endRowKey=" + endRowKey + " type=" + type, e);
+        } finally {
+            Util.close(resultScanner);
+            //Util.close(htableInterface);
+            closeHTable(htableInterface);
+        }
+
+        return resultList;
+    }
+    
+    private <T> List<List<SimpleHbaseDOResult<T>>> findObjectList_internal_mv(
+            RowKey startRowKey, long pageSize, Class<? extends T> type,
+            @Nullable Filter filter, @Nullable QueryExtInfo queryExtInfo) {
+        Util.checkRowKey(startRowKey);
+        Util.checkNull(type);
+
+        Scan scan = constructScan(startRowKey, pageSize, filter, queryExtInfo);
+
+        long startIndex = 0L;
+        long length = pageSize;
+
+        if (queryExtInfo != null) {
+            if (queryExtInfo.isMaxVersionSet()) {
+                scan.setMaxVersions(queryExtInfo.getMaxVersions());
+            }
+            if (queryExtInfo.isTimeRangeSet()) {
+                try {
+                    scan.setTimeRange(queryExtInfo.getMinStamp(), queryExtInfo.getMaxStamp());
+                } catch (IOException e) {
+                    // should never happen.
+                    throw new SimpleHBaseException("should never happen.", e);
+                }
+            }
+            if (queryExtInfo.isLimitSet()) {
+                startIndex = queryExtInfo.getStartIndex();
+                length = queryExtInfo.getLength();
+            }
+        }
+
+        applyRequestFamilyAndQualifier(type, scan);
+
+        HTableInterface htableInterface = htableInterface();
+        ResultScanner resultScanner = null;
+
+        List<List<SimpleHbaseDOResult<T>>> resultList = new ArrayList<List<SimpleHbaseDOResult<T>>>();
+
+        try {
+            resultScanner = htableInterface.getScanner(scan);
+            long ignoreCounter = startIndex;
+            long resultCounter = 0L;
+            Result result = null;
+            while ((result = resultScanner.next()) != null) {
+                if (ignoreCounter-- > 0) {
+                    continue;
+                }
+                List<SimpleHbaseDOResult<T>> tem = convertToSimpleHbaseDOResult(result, type);
+                if (!tem.isEmpty()) {
+                    resultList.add(tem);
+                    if (++resultCounter >= length) {
+                        break;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new SimpleHBaseException(
+                    "findObjectList_internal_mv. startRowKey=" + startRowKey + " pageSize=" + pageSize + " type=" + type, e);
         } finally {
             Util.close(resultScanner);
             //Util.close(htableInterface);
@@ -457,8 +661,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 
         StringBuilder sb = new StringBuilder();
         Map<Object, Object> context = new HashMap<Object, Object>();
-        hbaseQuery.getHqlNode().applyParaMap(para, sb, context,
-                simpleHbaseRuntimeSetting);
+        hbaseQuery.getHqlNode().applyParaMap(para, sb, context, simpleHbaseRuntimeSetting);
 
         String hql = sb.toString().trim();
 
@@ -467,8 +670,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         }
 
         ProgContext progContext = TreeUtil.parseProgContext(hql);
-        return ContextUtil.parseSelectFilter(progContext, hbaseTableConfig,
-                para, simpleHbaseRuntimeSetting);
+        return ContextUtil.parseSelectFilter(progContext, hbaseTableConfig, para, simpleHbaseRuntimeSetting);
     }
 
     @Override
@@ -489,8 +691,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     }
 
     @Override
-    public <T> void putObjectListMV(List<PutRequest<T>> putRequestList,
-            Date timestamp) {
+    public <T> void putObjectListMV(List<PutRequest<T>> putRequestList, Date timestamp) {
 
         Util.checkNull(timestamp);
 
@@ -498,8 +699,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     }
 
     @Override
-    public <T> void putObjectListMV(List<PutRequest<T>> putRequestList,
-            long timestamp) {
+    public <T> void putObjectListMV(List<PutRequest<T>> putRequestList, long timestamp) {
 
         applyTimeStampForPutRequest(putRequestList, timestamp);
 
@@ -530,8 +730,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         putObjectList_internal(putRequestList);
     }
 
-    private <T> void cleanTimeStampForPutRequest(
-            List<PutRequest<T>> putRequestList) {
+    private <T> void cleanTimeStampForPutRequest(List<PutRequest<T>> putRequestList) {
         if (putRequestList == null || putRequestList.isEmpty()) {
             return;
         }
@@ -543,8 +742,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         }
     }
 
-    private <T> void applyTimeStampForPutRequest(
-            List<PutRequest<T>> putRequestList, long timeStamp) {
+    private <T> void applyTimeStampForPutRequest(List<PutRequest<T>> putRequestList, long timeStamp) {
         if (putRequestList == null || putRequestList.isEmpty()) {
             return;
         }
@@ -556,8 +754,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         }
     }
 
-    private <T> void checkTimeStampForPutRequest(
-            List<PutRequest<T>> putRequestList) {
+    private <T> void checkTimeStampForPutRequest(List<PutRequest<T>> putRequestList) {
         if (putRequestList == null || putRequestList.isEmpty()) {
             return;
         }
@@ -631,8 +828,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         try {
             oldVersion = versionedColumnInfo.field.get(oldT);
         } catch (Exception e) {
-            throw new SimpleHBaseException("updateObject. rowKey=" + rowKey
-                    + " oldT=" + oldT, e);
+            throw new SimpleHBaseException("updateObject. rowKey=" + rowKey + " oldT=" + oldT, e);
         }
         return updateObjectWithVersion(rowKey, newT, oldVersion);
 

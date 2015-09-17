@@ -51,8 +51,7 @@ public class Util {
         Util.checkNull(values);
 
         if (values.length != length) {
-            throw new SimpleHBaseException("checkLength error. values.length="
-                    + values.length + " length=" + length);
+            throw new SimpleHBaseException("checkLength error. values.length=" + values.length + " length=" + length);
         }
     }
 
@@ -63,8 +62,7 @@ public class Util {
         Util.checkNull(str);
 
         if (str.length() != length) {
-            throw new SimpleHBaseException("checkLength error. str=" + str
-                    + " length=" + length);
+            throw new SimpleHBaseException("checkLength error. str=" + str + " length=" + length);
         }
     }
 
@@ -81,8 +79,7 @@ public class Util {
         checkNull(rowKey);
 
         if (rowKey.toBytes() == null) {
-            throw new SimpleHBaseException("rowkey bytes is null. rowKey = "
-                    + rowKey);
+            throw new SimpleHBaseException("rowkey bytes is null. rowKey = " + rowKey);
         }
     }
 
@@ -129,8 +126,7 @@ public class Util {
         checkNull(other);
 
         if (one.getClass() != other.getClass()) {
-            throw new SimpleHBaseException("not same type. one = " + one
-                    + " other = " + other);
+            throw new SimpleHBaseException("not same type. one = " + one + " other = " + other);
         }
     }
 
@@ -143,12 +139,10 @@ public class Util {
         }
 
         if (one == null || other == null) {
-            throw new SimpleHBaseException("null object. one = " + one
-                    + " other = " + other);
+            throw new SimpleHBaseException("null object. one = " + one + " other = " + other);
         }
         if (!one.equals(other)) {
-            throw new SimpleHBaseException("not equal object. one = " + one
-                    + " other = " + other);
+            throw new SimpleHBaseException("not equal object. one = " + one + " other = " + other);
         }
     }
 

@@ -3,7 +3,7 @@ package com.appleframework.data.core.page;
 import java.io.Serializable;
 
 /**
- * ¼òµ¥·ÖÒ³Àà
+ * ç®€å•åˆ†é¡µç±»
  * 
  * @author xusm
  * 
@@ -19,7 +19,7 @@ public class SimplePage implements Paginable, Serializable {
 	protected long pageNo = 1;
 
 	/**
-	 * ¼ì²éÒ³Âë checkPageNo
+	 * æ£€æŸ¥é¡µç  checkPageNo
 	 * 
 	 * @param pageNo
 	 * @return if pageNo==null or pageNo<1 then return 1 else return pageNo
@@ -32,14 +32,14 @@ public class SimplePage implements Paginable, Serializable {
 	}
 
 	/**
-	 * ¹¹ÔìÆ÷
+	 * æ„é€ å™¨
 	 * 
 	 * @param pageNo
-	 *            Ò³Âë
+	 *            é¡µç 
 	 * @param pageSize
-	 *            Ã¿Ò³¼¸ÌõÊı¾İ
+	 *            æ¯é¡µå‡ æ¡æ•°æ®
 	 * @param totalCount
-	 *            ×Ü¹²¼¸ÌõÊı¾İ
+	 *            æ€»å…±å‡ æ¡æ•°æ®
 	 */
 	public SimplePage(long pageNo, long pageSize, long totalCount) {
 		setTotalCount(totalCount);
@@ -49,14 +49,14 @@ public class SimplePage implements Paginable, Serializable {
 	}
 	
 	/**
-	 * ¹¹ÔìÆ÷
+	 * æ„é€ å™¨
 	 * 
 	 * @param pageNo
-	 *            Ò³Âë
+	 *            é¡µç 
 	 * @param pageSize
-	 *            Ã¿Ò³¼¸ÌõÊı¾İ
+	 *            æ¯é¡µå‡ æ¡æ•°æ®
 	 * @param totalCount
-	 *            ×Ü¹²¼¸ÌõÊı¾İ
+	 *            æ€»å…±å‡ æ¡æ•°æ®
 	 */
 	public SimplePage(long pageNo, long pageSize) {
 		setPageSize(pageSize);
@@ -64,7 +64,7 @@ public class SimplePage implements Paginable, Serializable {
 	}
 
 	/**
-	 * µ÷ÕûÒ³Âë£¬Ê¹²»³¬¹ı×î´óÒ³Êı
+	 * è°ƒæ•´é¡µç ï¼Œä½¿ä¸è¶…è¿‡æœ€å¤§é¡µæ•°
 	 */
 	public void adjustPageNo() {
 		if (pageNo == 1) {
@@ -77,21 +77,21 @@ public class SimplePage implements Paginable, Serializable {
 	}
 
 	/**
-	 * »ñµÃÒ³Âë
+	 * è·å¾—é¡µç 
 	 */
 	public long getPageNo() {
 		return pageNo;
 	}
 
 	/**
-	 * Ã¿Ò³¼¸ÌõÊı¾İ
+	 * æ¯é¡µå‡ æ¡æ•°æ®
 	 */
 	public long getPageSize() {
 		return pageSize;
 	}
 
 	/**
-	 * ×Ü¹²¼¸ÌõÊı¾İ
+	 * æ€»å…±å‡ æ¡æ•°æ®
 	 */
 	public long getTotalCount() {
 		return totalCount;
@@ -99,7 +99,7 @@ public class SimplePage implements Paginable, Serializable {
 	
 
 	/**
-	 * ×Ü¹²¼¸Ò³
+	 * æ€»å…±å‡ é¡µ
 	 */
 	public long getTotalPage() {
 		long totalPage = totalCount / pageSize;
@@ -110,21 +110,21 @@ public class SimplePage implements Paginable, Serializable {
 	}
 
 	/**
-	 * ÊÇ·ñµÚÒ»Ò³
+	 * æ˜¯å¦ç¬¬ä¸€é¡µ
 	 */
 	public boolean isFirstPage() {
 		return pageNo <= 1;
 	}
 
 	/**
-	 * ÊÇ·ñ×îºóÒ»Ò³
+	 * æ˜¯å¦æœ€åä¸€é¡µ
 	 */
 	public boolean isLastPage() {
 		return pageNo >= getTotalPage();
 	}
 
 	/**
-	 * ÏÂÒ»Ò³Ò³Âë
+	 * ä¸‹ä¸€é¡µé¡µç 
 	 */
 	public long getNextPage() {
 		if (isLastPage()) {
@@ -135,7 +135,7 @@ public class SimplePage implements Paginable, Serializable {
 	}
 
 	/**
-	 * ÉÏÒ»Ò³Ò³Âë
+	 * ä¸Šä¸€é¡µé¡µç 
 	 */
 	public long getPrePage() {
 		if (isFirstPage()) {

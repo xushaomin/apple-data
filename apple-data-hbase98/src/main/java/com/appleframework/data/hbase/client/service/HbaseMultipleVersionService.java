@@ -106,6 +106,22 @@ public interface HbaseMultipleVersionService {
     public <T> List<List<SimpleHbaseDOResult<T>>> findObjectListMV(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             QueryExtInfo queryExtInfo);
+    
+    
+    /**
+     * Find POJO list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param queryExtInfo queryExtInfo.
+     * 
+     * @return SimpleHbaseDOResult list of list, sub list is timestamp desc
+     *         ordered.
+     * */
+    public <T> List<List<SimpleHbaseDOResult<T>>> findObjectListMV(
+            RowKey startRowKey, long pageSize, Class<? extends T> type,
+            QueryExtInfo queryExtInfo);
 
     /**
      * Dynamic query to find POJO list with range in [startRowKey,endRowKey).
@@ -122,6 +138,24 @@ public interface HbaseMultipleVersionService {
      * */
     public <T> List<List<SimpleHbaseDOResult<T>>> findObjectListMV(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
+            String id, @Nullable Map<String, Object> para,
+            QueryExtInfo queryExtInfo);
+    
+    /**
+     * Dynamic query to find POJO list with range in [startRowKey,endRowKey).
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * @param id dynamic query id.
+     * @param para parameter map.
+     * @param queryExtInfo queryExtInfo.
+     * 
+     * @return SimpleHbaseDOResult list of list, sub list is timestamp desc
+     *         ordered.
+     * */
+    public <T> List<List<SimpleHbaseDOResult<T>>> findObjectListMV(
+            RowKey startRowKey, long pageSize, Class<? extends T> type,
             String id, @Nullable Map<String, Object> para,
             QueryExtInfo queryExtInfo);
 
