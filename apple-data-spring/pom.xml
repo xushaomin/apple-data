@@ -10,7 +10,6 @@
 	</parent>
 	<artifactId>apple-data-spring</artifactId>
 	<name>apple-data-spring</name>
-	<version>0.0.8.RELEASE-cdh5</version>
 	<url>http://mvnrepo.appleframework.com</url>
 	
 	<properties>
