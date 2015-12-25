@@ -102,14 +102,14 @@
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase</artifactId>
-			<version>0.96.1.1-hadoop2</version>
+			<version>${hbase.version}</version>
 			<type>pom</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-common</artifactId>
-			<version>0.96.1.1-cdh5.0.2</version>
+			<version>${hbase.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>jdk.tools</groupId>
@@ -121,25 +121,25 @@
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-client</artifactId>
-			<version>0.96.1.1-cdh5.0.2</version>
+			<version>${hbase.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-server</artifactId>
-			<version>0.96.1.1-cdh5.0.2</version>
+			<version>${hbase.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-it</artifactId>
-			<version>0.96.1.1-cdh5.0.2</version>
+			<version>${hbase.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-shell</artifactId>
-			<version>0.96.1.1-cdh5.0.2</version>
+			<version>${hbase.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.jruby</groupId>
