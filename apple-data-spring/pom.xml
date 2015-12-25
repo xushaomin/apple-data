@@ -15,7 +15,7 @@
 	
 	<properties>
 		<spring.data.version>2.0.1.RELEASE-hadoop24</spring.data.version>
-		<hbase.version>0.96.1.1-cdh5.0.2</hbase.version>
+		<hbase.version>0.96.2-hadoop2</hbase.version>
 		<spring.version>4.2.0.RELEASE</spring.version>
 	</properties>
 	
