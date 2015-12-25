@@ -1,7 +1,7 @@
 package com.appleframework.data.core.page;
 
 /**
- * ·ÖÒ³½Ó¿Ú
+ * åˆ†é¡µæ¥å£
  * 
  * @author xusm
  * 
@@ -9,54 +9,54 @@ package com.appleframework.data.core.page;
 public interface Paginable {
 	
 	/**
-	 * ×Ü¼ÇÂ¼Êı
+	 * æ€»è®°å½•æ•°
 	 * 
 	 * @return
 	 */
 	public long getTotalCount();
 
 	/**
-	 * ×ÜÒ³Êı
+	 * æ€»é¡µæ•°
 	 * 
 	 * @return
 	 */
 	public long getTotalPage();
 
 	/**
-	 * Ã¿Ò³¼ÇÂ¼Êı
+	 * æ¯é¡µè®°å½•æ•°
 	 * 
 	 * @return
 	 */
 	public long getPageSize();
 
 	/**
-	 * µ±Ç°Ò³ºÅ
+	 * å½“å‰é¡µå·
 	 * 
 	 * @return
 	 */
 	public long getPageNo();
 
 	/**
-	 * ÊÇ·ñµÚÒ»Ò³
+	 * æ˜¯å¦ç¬¬ä¸€é¡µ
 	 * 
 	 * @return
 	 */
 	public boolean isFirstPage();
 
 	/**
-	 * ÊÇ·ñ×îºóÒ»Ò³
+	 * æ˜¯å¦æœ€åä¸€é¡µ
 	 * 
 	 * @return
 	 */
 	public boolean isLastPage();
 
 	/**
-	 * ·µ»ØÏÂÒ³µÄÒ³ºÅ
+	 * è¿”å›ä¸‹é¡µçš„é¡µå·
 	 */
 	public long getNextPage();
 
 	/**
-	 * ·µ»ØÉÏÒ³µÄÒ³ºÅ
+	 * è¿”å›ä¸Šé¡µçš„é¡µå·
 	 */
 	public long getPrePage();
 
