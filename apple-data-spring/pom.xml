@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>apple-data-core</artifactId>
-			<version>${project.version}</version>
+			<version>0.0.8.RELEASE</version>
 		</dependency>
 		
 		<dependency>
