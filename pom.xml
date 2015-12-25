@@ -12,7 +12,11 @@
     	<module>apple-data-hbase98</module>
     	<module>apple-data-spring</module>
 	</modules>
-
+	
+	<properties>
+		<file.encoding>UTF-8</file.encoding>
+	</properties>
+	
 	<build>
 		<plugins>
 			<plugin>
