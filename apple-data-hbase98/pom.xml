@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.appleframework.data</groupId>
 		<artifactId>apple-data</artifactId>
-		<version>0.0.7.RELEASE</version>
+		<version>0.0.8.RELEASE</version>
 	</parent>
 	<artifactId>apple-data-hbase98</artifactId>
 	<name>apple-data-hbase98</name>
@@ -15,8 +15,7 @@
 	<properties>
 		<hbase.version>0.98.8-hadoop2</hbase.version>
 		<hadoop.version>2.2.0</hadoop.version>
-		<spring.version>4.0.5.RELEASE</spring.version>
-		<apple.version>0.0.3.RELEASE</apple.version>
+		<spring.version>4.2.0.RELEASE</spring.version>
 	</properties>
 	
 	<dependencies>
@@ -251,12 +250,14 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${spring.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
 			<version>${spring.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
@@ -270,12 +271,13 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 		
