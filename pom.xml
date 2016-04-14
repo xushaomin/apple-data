@@ -11,6 +11,7 @@
 		<module>apple-data-hbase96</module>
     	<module>apple-data-hbase98</module>
     	<module>apple-data-spring</module>
+    	<module>apple-data-hbase1x</module>
 	</modules>
 	
 	<properties>
