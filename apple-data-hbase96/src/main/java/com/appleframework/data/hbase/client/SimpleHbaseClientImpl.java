@@ -1295,7 +1295,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     }
     
     
-    //·ÖÒ³²éÑ¯
+    //åˆ†é¡µæŸ¥è¯¢
     @Override
     public <T> Pagination<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
@@ -1340,14 +1340,15 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         Util.checkNull(type);
         
         Pagination<T> page = null;
-		// »ñÈ¡×î´ó·µ»Ø½á¹ûÊıÁ¿
+		
+        // è·å–æœ€å¤§è¿”å›ç»“æœæ•°é‡
 		if (pageSize <= 0)
 			pageSize = 100;
 
 		if (pageNo <= 0)
 			pageNo = 1;
 
-		// ¼ÆËãÆğÊ¼Ò³ºÍ½áÊøÒ³
+		// è®¡ç®—èµ·å§‹é¡µå’Œç»“æŸé¡µ
 		long firstPage = (pageNo - 1) * pageSize;
 		long endPage = firstPage + pageSize;
 
@@ -1408,7 +1409,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 				}
                 totalCount ++;
             }
-            // ·â×°·ÖÒ³¶ÔÏó
+            // å°è£…åˆ†é¡µå¯¹è±¡
             page = new Pagination<T>(pageNo, pageSize, totalCount);
          	page.setList((List<T>) resultList);
         } catch (IOException e) {
