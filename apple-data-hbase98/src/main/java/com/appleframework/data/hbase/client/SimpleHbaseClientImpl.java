@@ -1409,7 +1409,8 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 				}
                 totalCount ++;
             }
-            // ��װ��ҳ����
+            
+            // 封装分页对象
             page = new Pagination<T>(pageNo, pageSize, totalCount);
          	page.setList((List<T>) resultList);
         } catch (IOException e) {
