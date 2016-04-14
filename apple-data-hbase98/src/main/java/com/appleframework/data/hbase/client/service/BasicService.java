@@ -353,8 +353,7 @@ public interface BasicService {
             RowKey startRowKey, long pageSize, Class<? extends T> type,
             String id, @Nullable Map<String, Object> para,
             QueryExtInfo queryExtInfo);
-    //
-
+    
     /**
      * Find POJO in batch mode.
      * 
@@ -418,7 +417,7 @@ public interface BasicService {
     public void deleteObjectList(RowKey startRowKey, RowKey endRowKey, Class<?> type);
     
     
-    //��ҳ��ѯ
+    //分页查询:针对小数据量的分页查询
     
     /**
      * Find POJO and row key list with range in [startRowKey,endRowKey).

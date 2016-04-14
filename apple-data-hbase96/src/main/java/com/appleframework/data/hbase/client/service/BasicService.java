@@ -418,7 +418,7 @@ public interface BasicService {
     public void deleteObjectList(RowKey startRowKey, RowKey endRowKey, Class<?> type);
     
     
-    //��ҳ��ѯ
+    //分页查询:针对小数据量的分页查询
     
     /**
      * Find POJO and row key list with range in [startRowKey,endRowKey).
