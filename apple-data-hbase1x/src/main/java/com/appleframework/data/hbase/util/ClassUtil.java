@@ -1,5 +1,6 @@
 package com.appleframework.data.hbase.util;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,10 @@ public class ClassUtil {
         simpleClassMap.put("String", String.class);
         simpleClassMap.put("date", Date.class);
         simpleClassMap.put("Date", Date.class);
+        
+        simpleClassMap.put("BigDecimal", BigDecimal.class);
+        simpleClassMap.put("bigdecimal", BigDecimal.class);
+
 
         boxTypeMap.put(byte.class, Byte.class);
         boxTypeMap.put(short.class, Short.class);
