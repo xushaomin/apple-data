@@ -1,5 +1,6 @@
 package com.appleframework.data.hbase.type;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,9 @@ public class DefaultTypeHandlers {
         defaultHandlers.put(Long.class, new LongHandler());
         defaultHandlers.put(Float.class, new FloatHandler());
         defaultHandlers.put(Double.class, new DoubleHandler());
+        
+        defaultHandlers.put(BigDecimal.class, new BigDecimalHandler());
+
     }
 
     public static TypeHandler findDefaultHandler(Class<?> type) {
