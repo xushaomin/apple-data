@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>apple-data</artifactId>
 		<groupId>com.appleframework.data</groupId>
-		<version>0.0.8.RELEASE</version>
+		<version>0.0.9.RELEASE</version>
 	</parent>
 	<artifactId>apple-data-spring</artifactId>
 	<name>apple-data-spring</name>
@@ -72,7 +72,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>apple-data-core</artifactId>
-			<version>0.0.8.RELEASE</version>
+			<version>${project.version}</version>
 		</dependency>
 		
 		<dependency>
