@@ -16,6 +16,7 @@ import com.appleframework.data.hbase.core.NotNullable;
 import com.appleframework.data.hbase.core.Nullable;
 import com.appleframework.data.hbase.exception.SimpleHBaseException;
 import com.appleframework.data.hbase.hql.HBaseQuery;
+import com.appleframework.data.hbase.util.StringUtil;
 import com.appleframework.data.hbase.util.Util;
 import com.appleframework.data.hbase.util.XmlUtil;
 
@@ -56,6 +57,8 @@ public class HBaseTableConfig {
      */
     private ConcurrentMap<Class<?>, TypeInfo> mappingTypes     = new ConcurrentHashMap<Class<?>, TypeInfo>();
 
+    private String tableName;
+    
     /**
      * Init this object.
      * */
@@ -66,7 +69,10 @@ public class HBaseTableConfig {
             List<HBaseColumnSchema> hbaseColumnSchemas = new ArrayList<HBaseColumnSchema>();
             HBaseTableConfigParser.parseTableSchema(configResource.getInputStream(), hbaseTableSchema, hbaseColumnSchemas);
             hbaseTableSchema.init(hbaseColumnSchemas);
-
+            if(StringUtil.isNotEmptyString(tableName)) {
+                hbaseTableSchema.setTableName(tableName);
+            }
+            
             List<HBaseQuery> hbaseQueries = HBaseTableConfigParser.parseHBaseQuery(configResource.getInputStream());
 
             addHBaseQueryList(hbaseQueries);
@@ -157,6 +163,10 @@ public class HBaseTableConfig {
 
 	public void setAutoFlush(boolean autoFlush) {
 		this.autoFlush = autoFlush;
+	}
+	
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
 
 	@Override
