@@ -9,7 +9,7 @@
 		<version>0.1.0.RELEASE</version>
 	</parent>
 	<artifactId>apple-data-hbase1x</artifactId>
-	<name>apple-data-hbase98</name>
+	<name>apple-data-hbase1x</name>
 	<url>http://mvnrepo.appleframework.com</url>
 	
 	<properties>
