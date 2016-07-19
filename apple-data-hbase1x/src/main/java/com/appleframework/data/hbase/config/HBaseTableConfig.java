@@ -69,9 +69,13 @@ public class HBaseTableConfig {
             List<HBaseColumnSchema> hbaseColumnSchemas = new ArrayList<HBaseColumnSchema>();
             HBaseTableConfigParser.parseTableSchema(configResource.getInputStream(), hbaseTableSchema, hbaseColumnSchemas);
             hbaseTableSchema.init(hbaseColumnSchemas);
+            
+            log.info("The xml set tableName is " + tableName);
             if(StringUtil.isNotEmptyString(tableName)) {
                 hbaseTableSchema.setTableName(tableName);
             }
+            
+            log.info("The xml set autoFlush is " + autoFlush);
 
             List<HBaseQuery> hbaseQueries = HBaseTableConfigParser.parseHBaseQuery(configResource.getInputStream());
 
