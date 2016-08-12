@@ -402,7 +402,7 @@ public interface BasicService {
      * @param rowKey rowKey.
      * @param type POJO type.
      * */
-    public void deleteObject(RowKey rowKey, Class<?> type, boolean isAll);
+    public void deleteObject(RowKey rowKey, Class<?> type, boolean isDeleteColumn);
 
     /**
      * Delete POJO list.
@@ -418,7 +418,7 @@ public interface BasicService {
      * @param rowKeyList rowKeyList.
      * @param type POJO type.
      * */
-    public void deleteObjectList(List<RowKey> rowKeyList, Class<?> type, boolean isAll);
+    public void deleteObjectList(List<RowKey> rowKeyList, Class<?> type, boolean isDeleteColumn);
 
     /**
      * Batch delete POJO list.
@@ -429,6 +429,16 @@ public interface BasicService {
      * 
      * */
     public void deleteObjectList(RowKey startRowKey, RowKey endRowKey, Class<?> type);
+    
+    /**
+     * Batch delete POJO list.
+     * 
+     * @param startRowKey startRowKey.
+     * @param endRowKey endRowKey.
+     * @param type POJO type.
+     * 
+     * */
+    public void deleteObjectList(RowKey startRowKey, RowKey endRowKey, Class<?> type, boolean isDeleteColumn);
     
     
     //分页查询:针对小数据量的分页查询

@@ -1030,7 +1030,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         List<DeleteRequest> deleteRequestList = new ArrayList<DeleteRequest>();
         deleteRequestList.add(new DeleteRequest(rowKey, timeStamp));
 
-        deleteObjectList_byRowKey_internal(deleteRequestList, type, false);
+        deleteObjectList_byRowKey_internal(deleteRequestList, type, true);
     }
 
     @Override
@@ -1051,13 +1051,13 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             deleteRequestList.add(new DeleteRequest(rowKey, timeStamp));
         }
 
-        deleteObjectList_byRowKey_internal(deleteRequestList, type, false);
+        deleteObjectList_byRowKey_internal(deleteRequestList, type, true);
     }
 
     @Override
     public void deleteObjectListMV(List<DeleteRequest> deleteRequestList, Class<?> type) {
         checkTimeStampForDeleteRequest(deleteRequestList);
-        deleteObjectList_byRowKey_internal(deleteRequestList, type, false);
+        deleteObjectList_byRowKey_internal(deleteRequestList, type, true);
     }
 
     @Override
@@ -1068,20 +1068,20 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     }
     
     @Override
-    public void deleteObject(RowKey rowKey, Class<?> type, boolean isAll) {
+    public void deleteObject(RowKey rowKey, Class<?> type, boolean isDeleteColumn) {
         List<RowKey> rowKeyList = new ArrayList<RowKey>();
         rowKeyList.add(rowKey);
-        deleteObjectList(rowKeyList, type, isAll);
+        deleteObjectList(rowKeyList, type, isDeleteColumn);
     }
     
     @Override
-    public void deleteObjectList(List<RowKey> rowKeyList, Class<?> type, boolean isAll) {
+    public void deleteObjectList(List<RowKey> rowKeyList, Class<?> type, boolean isDeleteColumn) {
         Util.checkNull(rowKeyList);
         List<DeleteRequest> deleteRequestList = new ArrayList<DeleteRequest>();
         for (RowKey rowKey : rowKeyList) {
             deleteRequestList.add(new DeleteRequest(rowKey));
         }
-        deleteObjectList_byRowKey_internal(deleteRequestList, type, isAll);
+        deleteObjectList_byRowKey_internal(deleteRequestList, type, isDeleteColumn);
     }
 
     @Override
@@ -1091,7 +1091,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         for (RowKey rowKey : rowKeyList) {
             deleteRequestList.add(new DeleteRequest(rowKey));
         }
-        deleteObjectList_byRowKey_internal(deleteRequestList, type, false);
+        deleteObjectList_byRowKey_internal(deleteRequestList, type, true);
     }
 
     private void checkTimeStampForDeleteRequest(List<DeleteRequest> deleteRequestList) {
@@ -1105,7 +1105,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         }
     }
 
-    private void deleteObjectList_byRowKey_internal(List<DeleteRequest> deleteRequestList, Class<?> type, boolean isAll) {
+    private void deleteObjectList_byRowKey_internal(List<DeleteRequest> deleteRequestList, Class<?> type, boolean isDeleteColumn) {
 
         Util.checkNull(deleteRequestList);
         Util.checkNull(type);
@@ -1125,7 +1125,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 
         for (DeleteRequest deleteRequest : deleteRequestList) {
             Delete delete = new Delete(deleteRequest.getRowKey().toBytes());
-            if(!isAll) {
+            if(isDeleteColumn) {
             	for (ColumnInfo columnInfo : columnInfoList) {
                     if (deleteRequest.getTimestamp() == null) {
                         //delete all versions.
@@ -1169,6 +1169,22 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         List<ColumnInfo> columnInfoList = typeInfo.getColumnInfos();
 
         delete_internal_with_scan_first(startRowKey, endRowKey, null, columnInfoList, null, null);
+    }
+    
+    @Override
+    public void deleteObjectList(RowKey startRowKey, RowKey endRowKey, Class<?> type, boolean isDeleteColumn) {
+        Util.checkRowKey(startRowKey);
+        Util.checkRowKey(endRowKey);
+        Util.checkNull(type);
+
+        TypeInfo typeInfo = findTypeInfo(type);
+        if(!isDeleteColumn) {
+        	delete_internal_with_scan_first(startRowKey, endRowKey, typeInfo);
+        }
+        else {
+            List<ColumnInfo> columnInfoList = typeInfo.getColumnInfos();
+            delete_internal_with_scan_first(startRowKey, endRowKey, null, columnInfoList, null, null);
+        }
     }
 
     @Override
@@ -1270,6 +1286,72 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                             }
                         }
                     }
+
+                    deletes.add(delete);
+
+                    if (deletes.size() >= deleteBatch) {
+                        break;
+                    }
+                }
+
+            } catch (IOException e) {
+                throw new SimpleHBaseException("delete_internal. scan = "
+                        + temScan, e);
+            } finally {
+                Util.close(resultScanner);
+                //Util.close(htableInterface);
+                closeHTable(htableInterface);
+            }
+
+            final int deleteListSize = deletes.size();
+            if (deleteListSize == 0) {
+                return;
+            }
+
+            try {
+                htableInterface = htableInterface();
+                htableInterface.delete(deletes);
+            } catch (IOException e) {
+                throw new SimpleHBaseException("delete_internal. scan = " + temScan, e);
+            } finally {
+                //Util.close(htableInterface);
+                closeHTable(htableInterface);
+            }
+
+            //successful delete will clear the items of deletes list.
+            if (deletes.size() > 0) {
+                throw new SimpleHBaseException("delete_internal fail. deletes=" + deletes);
+            }
+
+            if (deleteListSize < deleteBatch) {
+                return;
+            }
+        }
+    }
+    
+    /**
+     * columnInfoList and hbaseColumnSchemaList can not be null or empty both.
+     * */
+    private void delete_internal_with_scan_first(RowKey startRowKey, RowKey endRowKey, TypeInfo typeInfo) {
+
+        final int deleteBatch = getDeleteBatch();
+
+        while (true) {
+
+            RowKey nextStartRowkey = startRowKey;
+            Scan temScan = constructScan(nextStartRowkey, endRowKey, null, null);
+
+            List<Delete> deletes = new LinkedList<Delete>();
+
+            HTableInterface htableInterface = htableInterface();
+            ResultScanner resultScanner = null;
+            try {
+                resultScanner = htableInterface.getScanner(temScan);
+                Result result = null;
+                while ((result = resultScanner.next()) != null) {
+
+                    Delete delete = new Delete(result.getRow());
+                    nextStartRowkey = new BytesRowKey(result.getRow());
 
                     deletes.add(delete);
 
