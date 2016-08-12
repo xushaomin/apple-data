@@ -134,8 +134,7 @@ public interface BasicService {
      * @param type POJO type.
      * @return POJO list.
      * */
-    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
-            Class<? extends T> type);
+    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize, Class<? extends T> type);
 
     /**
      * Find POJO list with range in [startRowKey,endRowKey).
@@ -190,8 +189,7 @@ public interface BasicService {
      * 
      * @return POJO and key.
      * */
-    public <T> SimpleHbaseDOWithKeyResult<T> findObjectAndKey(RowKey rowKey,
-            Class<? extends T> type);
+    public <T> SimpleHbaseDOWithKeyResult<T> findObjectAndKey(RowKey rowKey, Class<? extends T> type);
 
     /**
      * Find object and row key with row key.
@@ -397,6 +395,14 @@ public interface BasicService {
      * @param type POJO type.
      * */
     public void deleteObject(RowKey rowKey, Class<?> type);
+    
+    /**
+     * Delete POJO.
+     * 
+     * @param rowKey rowKey.
+     * @param type POJO type.
+     * */
+    public void deleteObject(RowKey rowKey, Class<?> type, boolean isAll);
 
     /**
      * Delete POJO list.
@@ -405,6 +411,14 @@ public interface BasicService {
      * @param type POJO type.
      * */
     public void deleteObjectList(List<RowKey> rowKeyList, Class<?> type);
+    
+    /**
+     * Delete POJO list.
+     * 
+     * @param rowKeyList rowKeyList.
+     * @param type POJO type.
+     * */
+    public void deleteObjectList(List<RowKey> rowKeyList, Class<?> type, boolean isAll);
 
     /**
      * Batch delete POJO list.

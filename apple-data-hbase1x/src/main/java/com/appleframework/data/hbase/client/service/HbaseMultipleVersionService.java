@@ -46,8 +46,7 @@ public interface HbaseMultipleVersionService {
      * @param putRequestList putRequestList.
      * @param timestamp timestamp.
      * */
-    public <T> void putObjectListMV(List<PutRequest<T>> putRequestList,
-            long timestamp);
+    public <T> void putObjectListMV(List<PutRequest<T>> putRequestList, long timestamp);
 
     /**
      * Put POJO list with specified timestamp.
@@ -55,8 +54,7 @@ public interface HbaseMultipleVersionService {
      * @param putRequestList putRequestList.
      * @param timestamp timestamp.
      * */
-    public <T> void putObjectListMV(List<PutRequest<T>> putRequestList,
-            Date timestamp);
+    public <T> void putObjectListMV(List<PutRequest<T>> putRequestList, Date timestamp);
 
     /**
      * Put list of POJO with its timestamp.
@@ -184,8 +182,7 @@ public interface HbaseMultipleVersionService {
      * @param type POJO type.
      * @param timeStamp timeStamp.
      * */
-    public void deleteObjectListMV(List<RowKey> rowKeyList, Class<?> type,
-            long timeStamp);
+    public void deleteObjectListMV(List<RowKey> rowKeyList, Class<?> type, long timeStamp);
 
     /**
      * Delete POJO list.
@@ -194,8 +191,7 @@ public interface HbaseMultipleVersionService {
      * @param type POJO type.
      * @param timeStamp timeStamp.
      * */
-    public void deleteObjectListMV(List<RowKey> rowKeyList, Class<?> type,
-            Date timeStamp);
+    public void deleteObjectListMV(List<RowKey> rowKeyList, Class<?> type, Date timeStamp);
 
     /**
      * Delete POJO list with its timestamp.
@@ -203,6 +199,5 @@ public interface HbaseMultipleVersionService {
      * @param deleteRequestList deleteRequestList.
      * @param type POJO type.
      * */
-    public void deleteObjectListMV(List<DeleteRequest> deleteRequestList,
-            Class<?> type);
+    public void deleteObjectListMV(List<DeleteRequest> deleteRequestList, Class<?> type);
 }
