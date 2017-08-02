@@ -1,11 +1,13 @@
 package com.appleframework.data.hbase.client;
 
+import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.NamespaceDescriptor;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.log4j.Logger;
 
 import com.appleframework.data.hbase.config.HBaseDataSource;
+import com.appleframework.data.hbase.config.HBaseTableSchema;
 import com.appleframework.data.hbase.exception.SimpleHBaseException;
 import com.appleframework.data.hbase.util.Util;
 
@@ -56,6 +58,37 @@ public class SimpleHbaseAdminClientImpl implements SimpleHbaseAdminClient {
         }
     }
 
+    @SuppressWarnings("deprecation")
+	@Override
+    public void createTable(HBaseTableSchema hbaseTableSchema) {
+    	Util.checkNull(hbaseTableSchema);
+    	HTableDescriptor tableDescriptor = new HTableDescriptor(hbaseTableSchema.getTableName());
+        try {
+            HBaseAdmin hbaseAdmin = hbaseDataSource.getHBaseAdmin();
+            NamespaceDescriptor[] namespaceDescriptors = hbaseAdmin.listNamespaceDescriptors();
+            String namespace = tableDescriptor.getTableName().getNamespaceAsString();
+            boolean isExist = false;
+            for (NamespaceDescriptor nd : namespaceDescriptors) {
+                if (nd.getName().equals(namespace)) {
+                    isExist = true;
+                    break;
+                }
+            }
+            log.info("namespace " + namespace + " isExist " + isExist);
+            if (!isExist) {
+                hbaseAdmin.createNamespace(NamespaceDescriptor.create(namespace).build());
+            }
+            if(null != hbaseTableSchema.getDefaultFamily())
+            	tableDescriptor.addFamily(new HColumnDescriptor(hbaseTableSchema.getDefaultFamily()));
+            hbaseAdmin.createTable(tableDescriptor);
+            HTableDescriptor newTableDescriptor = hbaseAdmin.getTableDescriptor(tableDescriptor.getName());
+            log.info("create table " + newTableDescriptor);
+        } catch (Exception e) {
+            log.error(e);
+            throw new SimpleHBaseException(e);
+        }
+    }
+    
     @Override
     public void deleteTable(String tableName) {
         Util.checkEmptyString(tableName);
@@ -70,6 +103,18 @@ public class SimpleHbaseAdminClientImpl implements SimpleHbaseAdminClient {
                 }
                 hbaseAdmin.deleteTable(tableName);
             }
+        } catch (Exception e) {
+            log.error(e);
+            throw new SimpleHBaseException(e);
+        }
+    }
+    
+    @Override
+    public boolean tableExists(String tableName) {
+        Util.checkEmptyString(tableName);
+        try {
+            HBaseAdmin hbaseAdmin = hbaseDataSource.getHBaseAdmin();
+            return hbaseAdmin.tableExists(tableName);
         } catch (Exception e) {
             log.error(e);
             throw new SimpleHBaseException(e);

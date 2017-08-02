@@ -29,8 +29,7 @@ public class SimpleHbaseClientFactory {
      * @param simpleHbaseClient simpleHbaseClient.
      * @return encapsulated SimpleHbaseClient.
      * */
-    public static SimpleHbaseClient getSimpleHbaseClient(
-            SimpleHbaseClient simpleHbaseClient) {
+    public static SimpleHbaseClient getSimpleHbaseClient(SimpleHbaseClient simpleHbaseClient) {
         return getWrapper(SimpleHbaseClient.class, simpleHbaseClient);
     }
 
@@ -38,35 +37,24 @@ public class SimpleHbaseClientFactory {
      * Encapsulate interface.
      * */
     public static <T> T getWrapper(Class<T> type, T t) {
-        Object proxy = Proxy.newProxyInstance(type.getClassLoader(),
-                new Class[] { type }, new ClientInvocationHandler<T>(t));
+        Object proxy = Proxy.newProxyInstance(type.getClassLoader(), new Class[] { type }, new ClientInvocationHandler<T>(t));
         return type.cast(proxy);
     }
 
-    private static class ClientInvocationHandler<T> implements
-            InvocationHandler {
+    private static class ClientInvocationHandler<T> implements InvocationHandler {
 
-        /** log. */
-        final private static Logger log       = Logger.getLogger(ClientInvocationHandler.class);
+		final private static Logger log = Logger.getLogger(ClientInvocationHandler.class);
 
-        /** performance digest log. */
-        private static Logger       digestLog = Logger.getLogger("simplehbase.digest");
+		private static Logger digestLog = Logger.getLogger("simplehbase.digest");
 
-        /**
-         * t.
-         * */
-        private T                   t;
+		private T t;
 
-        /**
-         * ClientInvocationHandler.
-         * */
         public ClientInvocationHandler(T t) {
             this.t = t;
         }
 
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args)
-                throws Throwable {
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
             Object result = null;
             Exception ex = null;
@@ -106,33 +94,31 @@ public class SimpleHbaseClientFactory {
          * @param ex exception.
          * @return log string.
          * */
-        private String buildLogInfo(Method method, Object[] args,
-                Object result, Exception ex) {
-            StringBuilder sb = new StringBuilder();
+		private String buildLogInfo(Method method, Object[] args, Object result, Exception ex) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("invoke detail.\n");
+			sb.append("-------------invoke detail---------------\n");
+			sb.append("inner obj=" + t + "\n");
+			sb.append("method=" + method + "\n");
 
-            sb.append("invoke detail.\n");
-            sb.append("-------------invoke detail---------------\n");
-            sb.append("inner obj=" + t + "\n");
-            sb.append("method=" + method + "\n");
+			if (args == null) {
+				sb.append("args=null\n");
+			} else {
+				sb.append("args size=" + args.length + "\n");
+				for (int i = 0; i < args.length; i++) {
+					sb.append("args[" + i + "]=" + args[i] + "\n");
+				}
+			}
 
-            if (args == null) {
-                sb.append("args=null\n");
-            } else {
-                sb.append("args size=" + args.length + "\n");
-                for (int i = 0; i < args.length; i++) {
-                    sb.append("args[" + i + "]=" + args[i] + "\n");
-                }
-            }
+			if (ex != null) {
+				sb.append("ex=" + ExceptionUtil.getExceptionMsg(ex) + "\n");
+			} else {
+				sb.append("result=" + result + "\n");
+			}
 
-            if (ex != null) {
-                sb.append("ex=" + ExceptionUtil.getExceptionMsg(ex) + "\n");
-            } else {
-                sb.append("result=" + result + "\n");
-            }
-
-            sb.append("-------------invoke detail---------------\n");
-            return sb.toString();
-        }
+			sb.append("-------------invoke detail---------------\n");
+			return sb.toString();
+		}
     }
 
 }

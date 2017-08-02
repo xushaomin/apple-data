@@ -71,8 +71,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         return unwrap(findObjectAndKey(rowKey, type, id, para, queryExtInfo));
     }
 
-    private <T> T unwrap(
-            SimpleHbaseDOWithKeyResult<T> simpleHbaseDOWithKeyResult) {
+    private <T> T unwrap(SimpleHbaseDOWithKeyResult<T> simpleHbaseDOWithKeyResult) {
         if (simpleHbaseDOWithKeyResult == null) {
             return null;
         }
@@ -80,20 +79,17 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     }
 
     @Override
-    public <T> SimpleHbaseDOWithKeyResult<T> findObjectAndKey(RowKey rowKey,
-            Class<? extends T> type) {
+    public <T> SimpleHbaseDOWithKeyResult<T> findObjectAndKey(RowKey rowKey, Class<? extends T> type) {
         return findObjectAndKey(rowKey, type, (QueryExtInfo) null);
     }
 
     @Override
-    public <T> SimpleHbaseDOWithKeyResult<T> findObjectAndKey(RowKey rowKey,
-            Class<? extends T> type, QueryExtInfo queryExtInfo) {
+    public <T> SimpleHbaseDOWithKeyResult<T> findObjectAndKey(RowKey rowKey, Class<? extends T> type, QueryExtInfo queryExtInfo) {
         return findObjectAndKey_internal(rowKey, type, null, queryExtInfo);
     }
 
     @Override
-    public <T> SimpleHbaseDOWithKeyResult<T> findObjectAndKey(RowKey rowKey,
-            Class<? extends T> type, String id, Map<String, Object> para) {
+    public <T> SimpleHbaseDOWithKeyResult<T> findObjectAndKey(RowKey rowKey, Class<? extends T> type, String id, Map<String, Object> para) {
         return findObjectAndKey(rowKey, type, id, para, null);
     }
 
@@ -145,8 +141,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     
     //
     @Override
-    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
-            Class<? extends T> type) {
+    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize, Class<? extends T> type) {
         return unwrap(findObjectAndKeyList(startRowKey, pageSize, type));
     }
 
@@ -164,15 +159,13 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 
     @Override
     public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
-            Class<? extends T> type, String id,
-            @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo) {
+            Class<? extends T> type, String id, @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo) {
         return unwrap(findObjectAndKeyList(startRowKey, pageSize, type, id, para, queryExtInfo));
     }
     //
 
     @Override
-    public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey,
-            Class<? extends T> type) {
+    public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey, Class<? extends T> type) {
         return unwrap(findObjectAndKeyList(startRowKey, endRowKey, type));
     }
 
