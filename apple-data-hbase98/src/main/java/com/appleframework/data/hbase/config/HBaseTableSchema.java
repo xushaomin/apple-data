@@ -139,14 +139,13 @@ public class HBaseTableSchema {
         Util.checkEmptyString(qualifier);
 
         Map<String, HBaseColumnSchema> tem = columnSchemas.get(qualifier);
-        if (tem.size() == 1) {
+        if (null != tem && tem.size() == 1) {
             for (HBaseColumnSchema t : tem.values()) {
                 return t;
             }
         }
 
-        throw new SimpleHBaseException(
-                "0 or many HBaseColumnSchema with qualifier = " + qualifier);
+        throw new SimpleHBaseException("0 or many HBaseColumnSchema with qualifier = " + qualifier);
     }
 
     /**

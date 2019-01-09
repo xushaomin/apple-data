@@ -60,8 +60,7 @@ public class TypeInfo {
     /**
      * Parse TypeInfo from POJO's type and HBaseTableSchema.
      * */
-    public static TypeInfo parseInAir(Class<?> type,
-            HBaseTableSchema hbaseTableSchema) {
+    public static TypeInfo parseInAir(Class<?> type, HBaseTableSchema hbaseTableSchema) {
         Util.checkNull(type);
         Util.checkNull(hbaseTableSchema);
 
@@ -80,11 +79,9 @@ public class TypeInfo {
 
             //use field name as qualifier.
             String qualifier = field.getName();
-            HBaseColumnSchema hbaseColumnSchema = hbaseTableSchema
-                    .findColumnSchema(qualifier);
+            HBaseColumnSchema hbaseColumnSchema = hbaseTableSchema.findColumnSchema(qualifier);
 
-            ColumnInfo columnInfo = ColumnInfo.parseInAir(type, field,
-                    hbaseColumnSchema.getFamily());
+            ColumnInfo columnInfo = ColumnInfo.parseInAir(type, field, hbaseColumnSchema.getFamily());
 
             if (columnInfo == null) {
                 continue;
@@ -102,8 +99,7 @@ public class TypeInfo {
     /**
      * Parse TypeInfo from Node.
      * */
-    public static TypeInfo parseNode(Node node,
-            HBaseTableSchema hbaseTableSchema) {
+    public static TypeInfo parseNode(Node node, HBaseTableSchema hbaseTableSchema) {
         Util.checkNull(node);
         Util.checkNull(hbaseTableSchema);
 
@@ -123,8 +119,7 @@ public class TypeInfo {
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node fieldNode = nodeList.item(i);
-            ColumnInfo columnInfo = ColumnInfo.parseNode(type, fieldNode,
-                    hbaseTableSchema, defaultFamily);
+            ColumnInfo columnInfo = ColumnInfo.parseNode(type, fieldNode, hbaseTableSchema, defaultFamily);
             if (columnInfo == null) {
                 continue;
             }
