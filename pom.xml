@@ -7,11 +7,12 @@
 	<packaging>pom</packaging>
 	
 	<modules>
-		<module>apple-data-core</module>
-		<module>apple-data-hbase96</module>
+      <module>apple-data-core</module>
+      <module>apple-data-hbase96</module>
     	<module>apple-data-hbase98</module>
     	<module>apple-data-spring</module>
     	<module>apple-data-hbase1x</module>
+    	<module>apple-data-hbase2x</module>
 	</modules>
 	
 	<properties>
