@@ -13,7 +13,7 @@
 	<url>http://mvnrepo.appleframework.com</url>
 	
 	<properties>
-		<hbase.version>1.2.1</hbase.version>
+		<hbase.version>1.2.9</hbase.version>
 		<hadoop.version>2.7.2</hadoop.version>
 		<spring.version>4.2.0.RELEASE</spring.version>
 	</properties>
@@ -30,6 +30,7 @@
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-client</artifactId>
 			<version>${hbase.version}</version>
+			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.hbase</groupId>
@@ -74,6 +75,7 @@
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-annotations</artifactId>
 			<version>${hbase.version}</version>
+			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>jdk.tools</groupId>
@@ -94,6 +96,7 @@
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-common</artifactId>
 			<version>${hbase.version}</version>
+			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-collections</groupId>
@@ -130,12 +133,14 @@
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-protocol</artifactId>
 			<version>${hbase.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-common</artifactId>
 			<version>${hadoop.version}</version>
+			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.hadoop</groupId>
@@ -244,6 +249,7 @@
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-auth</artifactId>
 			<version>${hadoop.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
