@@ -6,16 +6,15 @@
 	<parent>
 		<groupId>com.appleframework.data</groupId>
 		<artifactId>apple-data</artifactId>
-		<version>0.1.2.RELEASE</version>
+		<version>0.1.3.RELEASE</version>
 	</parent>
 	<artifactId>apple-data-hbase2x</artifactId>
 	<name>apple-data-hbase2x</name>
 	<url>http://mvnrepo.appleframework.com</url>
 	
 	<properties>
-		<hbase.version>2.0.3</hbase.version>
+		<hbase.version>2.1.2</hbase.version>
 		<hadoop.version>3.1.1</hadoop.version>
-		<spring.version>4.2.0.RELEASE</spring.version>
 	</properties>
 	
 	<dependencies>
@@ -178,6 +177,10 @@
 					<artifactId>jetty-util</artifactId>
 				</exclusion>
 				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty-sslengine</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>com.sun.jersey</groupId>
 					<artifactId>jersey-core</artifactId>
 				</exclusion>
@@ -249,53 +252,35 @@
 		<dependency>
 			<groupId>org.antlr</groupId>
 			<artifactId>antlr4</artifactId>
-			<version>4.0</version>
 		</dependency>
-
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1.1</version>
-		</dependency>
-
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>${spring.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 		
