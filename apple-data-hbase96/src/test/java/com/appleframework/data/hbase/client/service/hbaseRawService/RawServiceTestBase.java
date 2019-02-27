@@ -11,6 +11,8 @@ import com.appleframework.data.hbase.myrecord.MyRecordTestBase;
 /**
  * @author xinzhi
  * */
+
+@SuppressWarnings("deprecation")
 public class RawServiceTestBase extends MyRecordTestBase {
 
     protected void assertSimpleHbaseCellResult(

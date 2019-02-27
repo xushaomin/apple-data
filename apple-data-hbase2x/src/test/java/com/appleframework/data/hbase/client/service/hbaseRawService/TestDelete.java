@@ -15,6 +15,8 @@ import com.appleframework.data.hbase.client.SimpleHbaseCellResult;
 /**
  * @author xinzhi
  * */
+
+@SuppressWarnings("deprecation")
 public class TestDelete extends RawServiceTestBase {
 
     private void fillData() {

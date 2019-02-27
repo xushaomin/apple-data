@@ -16,6 +16,8 @@ import com.appleframework.data.hbase.myrecord.MyRecordTestBase;
 /**
  * @author xinzhi
  */
+
+@SuppressWarnings("deprecation")
 public class TestSpecial extends MyRecordTestBase {
 
     //var parameter should have value.

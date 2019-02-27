@@ -15,6 +15,8 @@ import com.appleframework.data.hbase.myrecord.MyRecordTestBase;
 /**
  * @author xinzhi
  */
+
+@SuppressWarnings("deprecation")
 public class TestEqual extends MyRecordTestBase {
 
     @Test

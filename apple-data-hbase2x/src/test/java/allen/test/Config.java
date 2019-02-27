@@ -21,6 +21,8 @@ import com.appleframework.data.hbase.util.TableNameUtil;
 /**
  * @author xinzhi
  * */
+
+@SuppressWarnings("deprecation")
 public class Config {
 
     final public static String                     TableName              = "allen:MyRecordV_Allen3";

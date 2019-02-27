@@ -14,15 +14,15 @@ import com.appleframework.data.hbase.util.DateUtil;
 /**
  * @author xinzhi
  */
+
+@SuppressWarnings("deprecation")
 public class TestLiteralValue {
     @Test
     public void testEnum() {
-        Object object = new SimpleHbaseRuntimeSetting().interpret(Gender.class,
-                "FEMALE");
+        Object object = new SimpleHbaseRuntimeSetting().interpret(Gender.class, "FEMALE");
         Assert.assertEquals(Gender.FEMALE, object);
 
-        object = new SimpleHbaseRuntimeSetting()
-                .interpret(Gender.class, "MALE");
+        object = new SimpleHbaseRuntimeSetting() .interpret(Gender.class, "MALE");
         Assert.assertEquals(Gender.MALE, object);
     }
 
@@ -41,10 +41,8 @@ public class TestLiteralValue {
 
     @Test
     public void testDate_1() {
-        Date cDate = (Date) new DateInterpreter()
-                .interpret("2013-12-01_01:02:03");
-        Date eDate = DateUtil.parse("2013-12-01_01:02:03",
-                DateUtil.SecondFormat);
+        Date cDate = (Date) new DateInterpreter().interpret("2013-12-01_01:02:03");
+        Date eDate = DateUtil.parse("2013-12-01_01:02:03", DateUtil.SecondFormat);
         Assert.assertEquals(eDate, cDate);
     }
 

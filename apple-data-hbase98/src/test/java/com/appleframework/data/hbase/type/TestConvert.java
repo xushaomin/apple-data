@@ -11,6 +11,7 @@ import junit.framework.Assert;
 /**
  * @author xinzhi
  */
+@SuppressWarnings("deprecation")
 public class TestConvert {
     @Test
     public void testEnum() {

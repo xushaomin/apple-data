@@ -30,6 +30,8 @@ import org.junit.Before;
 /**
  * @author xinzhi.zhang
  * */
+
+@SuppressWarnings("deprecation")
 public abstract class HbaseTest {
 
     protected static Log             log                  = LogFactory

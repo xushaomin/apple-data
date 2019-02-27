@@ -16,6 +16,8 @@ import com.appleframework.data.hbase.myrecord.MyRecordRowKey;
 /**
  * @author xinzhi
  */
+
+@SuppressWarnings("deprecation")
 public class TestSpecial_MissingColumn extends MyRecordTestBase {
 
     @Test

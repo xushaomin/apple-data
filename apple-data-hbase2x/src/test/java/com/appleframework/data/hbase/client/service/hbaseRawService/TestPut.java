@@ -14,6 +14,8 @@ import com.appleframework.data.hbase.myrecord.MyRecordRowKey;
 /**
  * @author xinzhi
  * */
+
+@SuppressWarnings("deprecation")
 public class TestPut extends RawServiceTestBase {
 
     @Test

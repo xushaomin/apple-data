@@ -19,6 +19,7 @@ import com.appleframework.data.hbase.myrecord.MyRecordTestBase;
 /**
  * @author xinzhi
  */
+@SuppressWarnings("deprecation")
 public class TestScanWithIntelligentScanSize extends MyRecordTestBase {
 
     private static Log log = LogFactory.getLog(TestPutObjectListPerf.class);

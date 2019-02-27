@@ -19,6 +19,8 @@ import com.appleframework.data.hbase.util.DateUtil;
 /**
  * @author xinzhi
  * */
+
+@SuppressWarnings("deprecation")
 public class TestSelect extends RawServiceTestBase {
 
     @Test

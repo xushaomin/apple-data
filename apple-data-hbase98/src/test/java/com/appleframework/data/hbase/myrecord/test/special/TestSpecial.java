@@ -16,6 +16,8 @@ import com.appleframework.data.hbase.myrecord.MyRecordTestBase;
 /**
  * @author xinzhi
  */
+
+@SuppressWarnings("deprecation")
 public class TestSpecial extends MyRecordTestBase {
 
     //var parameter should have value.
@@ -23,8 +25,7 @@ public class TestSpecial extends MyRecordTestBase {
     public void nullParaValue() {
         addHql("select where name less #name#");
         Map<String, Object> para = new HashMap<String, Object>();
-        simpleHbaseClient.findObjectList(new MyRecordRowKey(0),
-                new MyRecordRowKey(100), MyRecord.class, TestHqlId, para);
+        simpleHbaseClient.findObjectList(new MyRecordRowKey(0), new MyRecordRowKey(100), MyRecord.class, TestHqlId, para);
     }
 
     //constant parameter should have value.

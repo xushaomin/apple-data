@@ -7,6 +7,8 @@ import org.junit.Test;
 /**
  * @author xinzhi
  * */
+
+@SuppressWarnings("deprecation")
 public class TestStringRowKey {
 
     @Test

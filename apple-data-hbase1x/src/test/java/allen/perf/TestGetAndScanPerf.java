@@ -16,6 +16,8 @@ import allen.test.Config;
 /**
  * @author xinzhi
  */
+
+@SuppressWarnings("deprecation")
 public class TestGetAndScanPerf extends HbaseTestBase {
 
     private static Log log = LogFactory.getLog(TestGetAndScanPerf.class);

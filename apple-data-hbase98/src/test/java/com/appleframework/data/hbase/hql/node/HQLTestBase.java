@@ -19,6 +19,8 @@ import com.appleframework.data.hbase.hql.HQLNode;
 /**
  * @author xinzhi
  */
+
+@SuppressWarnings("deprecation")
 public class HQLTestBase {
 
     /** log. */

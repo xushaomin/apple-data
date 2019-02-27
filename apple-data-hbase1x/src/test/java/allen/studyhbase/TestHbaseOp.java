@@ -19,6 +19,8 @@ import org.junit.Test;
 /**
  * @author xinzhi.zhang
  * */
+
+@SuppressWarnings("deprecation")
 public class TestHbaseOp extends HbaseTestBase {
 
     @Test

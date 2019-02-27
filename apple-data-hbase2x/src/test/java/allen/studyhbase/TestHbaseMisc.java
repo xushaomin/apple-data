@@ -25,6 +25,8 @@ import org.junit.Test;
 /**
  * @author xinzhi.zhang
  * */
+
+@SuppressWarnings("deprecation")
 public class TestHbaseMisc extends HbaseTestBase {
 
     private void fillData() throws Exception {

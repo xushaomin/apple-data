@@ -15,6 +15,8 @@ import com.appleframework.data.hbase.myrecord.MyRecordTestBase;
 /**
  * @author xinzhi
  */
+
+@SuppressWarnings("deprecation")
 public class TestSpecial_PutNull extends MyRecordTestBase {
 
     //hbase default to empty bytes.

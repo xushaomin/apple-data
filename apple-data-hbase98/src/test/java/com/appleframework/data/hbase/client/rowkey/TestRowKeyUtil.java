@@ -11,6 +11,8 @@ import com.appleframework.data.hbase.util.EncodingUtil;
 /**
  * @author xinzhi
  * */
+
+@SuppressWarnings("deprecation")
 public class TestRowKeyUtil {
 
     @Test

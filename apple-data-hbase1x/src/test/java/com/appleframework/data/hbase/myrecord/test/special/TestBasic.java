@@ -11,14 +11,15 @@ import com.appleframework.data.hbase.myrecord.MyRecordTestBase;
 /**
  * @author xinzhi
  * */
+
+@SuppressWarnings("deprecation")
 public class TestBasic extends MyRecordTestBase {
 
     @Test
     public void testSlim() {
         MyRecord record = parseSlim("id=0,name=allen,age=10,date=2012-01-01,gender=MALE,version=1");
         putRecord(record);
-        MyRecord resultRecord = simpleHbaseClient.findObject(record.rowKey(),
-                MyRecord.class);
+        MyRecord resultRecord = simpleHbaseClient.findObject(record.rowKey(), MyRecord.class);
         Assert.assertEquals(record, resultRecord);
     }
 
