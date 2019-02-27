@@ -3,12 +3,12 @@ package com.appleframework.data.hbase.client.service;
 import java.util.List;
 import java.util.Map;
 
-import com.appleframework.data.core.page.Pagination;
 import com.appleframework.data.hbase.client.PutRequest;
 import com.appleframework.data.hbase.client.QueryExtInfo;
 import com.appleframework.data.hbase.client.RowKey;
 import com.appleframework.data.hbase.client.SimpleHbaseDOWithKeyResult;
 import com.appleframework.data.hbase.core.Nullable;
+import com.appleframework.model.page.Paginator;
 
 /**
  * BasicService
@@ -39,8 +39,7 @@ public interface BasicService {
      * 
      * @return POJO.
      * */
-    public <T> T findObject(RowKey rowKey, Class<? extends T> type,
-            QueryExtInfo queryExtInfo);
+    public <T> T findObject(RowKey rowKey, Class<? extends T> type, QueryExtInfo queryExtInfo);
 
     /**
      * Dynamic query to find POJO.
@@ -52,8 +51,7 @@ public interface BasicService {
      * 
      * @return POJO.
      * */
-    public <T> T findObject(RowKey rowKey, Class<? extends T> type, String id,
-            @Nullable Map<String, Object> para);
+    public <T> T findObject(RowKey rowKey, Class<? extends T> type, String id, @Nullable Map<String, Object> para);
 
     /**
      * Dynamic query to find POJO.
@@ -66,8 +64,7 @@ public interface BasicService {
      * 
      * @return POJO.
      * */
-    public <T> T findObject(RowKey rowKey, Class<? extends T> type, String id,
-            @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo);
+    public <T> T findObject(RowKey rowKey, Class<? extends T> type, String id, @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo);
 
     /**
      * Find POJO list with range in [startRowKey,endRowKey).
@@ -77,8 +74,7 @@ public interface BasicService {
      * @param type POJO type.
      * @return POJO list.
      * */
-    public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey,
-            Class<? extends T> type);
+    public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey, Class<? extends T> type);
 
     /**
      * Find POJO list with range in [startRowKey,endRowKey).
@@ -90,8 +86,7 @@ public interface BasicService {
      * 
      * @return POJO list.
      * */
-    public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey,
-            Class<? extends T> type, QueryExtInfo queryExtInfo);
+    public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey, Class<? extends T> type, QueryExtInfo queryExtInfo);
 
     /**
      * Dynamic query to find POJO list with range in [startRowKey,endRowKey).
@@ -104,9 +99,7 @@ public interface BasicService {
      * 
      * @return POJO list.
      * */
-    public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey,
-            Class<? extends T> type, String id,
-            @Nullable Map<String, Object> para);
+    public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey, Class<? extends T> type, String id, @Nullable Map<String, Object> para);
 
     /**
      * Dynamic query to find POJO list with range in [startRowKey,endRowKey).
@@ -120,12 +113,8 @@ public interface BasicService {
      * 
      * @return POJO list.
      * */
-    public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey,
-            Class<? extends T> type, String id,
-            @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo);
+    public <T> List<T> findObjectList(RowKey startRowKey, RowKey endRowKey, Class<? extends T> type, String id, @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo);
     
-    
-    //
     /**
      * Find POJO list with range in [startRowKey,endRowKey).
      * 
@@ -146,8 +135,7 @@ public interface BasicService {
      * 
      * @return POJO list.
      * */
-    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
-            Class<? extends T> type, QueryExtInfo queryExtInfo);
+    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize, Class<? extends T> type, QueryExtInfo queryExtInfo);
 
     /**
      * Dynamic query to find POJO list with range in [startRowKey,endRowKey).
@@ -160,9 +148,7 @@ public interface BasicService {
      * 
      * @return POJO list.
      * */
-    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
-            Class<? extends T> type, String id,
-            @Nullable Map<String, Object> para);
+    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize, Class<? extends T> type, String id, @Nullable Map<String, Object> para);
 
     /**
      * Dynamic query to find POJO list with range in [startRowKey,endRowKey).
@@ -176,10 +162,7 @@ public interface BasicService {
      * 
      * @return POJO list.
      * */
-    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize,
-            Class<? extends T> type, String id,
-            @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo);
-    //
+    public <T> List<T> findObjectList(RowKey startRowKey, long pageSize, Class<? extends T> type, String id, @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo);
 
     /**
      * Find object and row key with row key.
@@ -200,8 +183,7 @@ public interface BasicService {
      * 
      * @return POJO and key.
      * */
-    public <T> SimpleHbaseDOWithKeyResult<T> findObjectAndKey(RowKey rowKey,
-            Class<? extends T> type, QueryExtInfo queryExtInfo);
+    public <T> SimpleHbaseDOWithKeyResult<T> findObjectAndKey(RowKey rowKey, Class<? extends T> type, QueryExtInfo queryExtInfo);
 
     /**
      * Dynamic query to find POJO and row key.
@@ -213,9 +195,7 @@ public interface BasicService {
      * 
      * @return POJO and key.
      * */
-    public <T> SimpleHbaseDOWithKeyResult<T> findObjectAndKey(RowKey rowKey,
-            Class<? extends T> type, String id,
-            @Nullable Map<String, Object> para);
+    public <T> SimpleHbaseDOWithKeyResult<T> findObjectAndKey(RowKey rowKey, Class<? extends T> type, String id, @Nullable Map<String, Object> para);
 
     /**
      * Dynamic query to find POJO and row key.
@@ -240,8 +220,7 @@ public interface BasicService {
      * @param type POJO type.
      * @return POJO and key list.
      * */
-    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
-            RowKey startRowKey, RowKey endRowKey, Class<? extends T> type);
+    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(RowKey startRowKey, RowKey endRowKey, Class<? extends T> type);
 
     /**
      * Find POJO and row key list with range in [startRowKey,endRowKey).
@@ -253,9 +232,7 @@ public interface BasicService {
      * 
      * @return POJO and key list.
      * */
-    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
-            RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
-            QueryExtInfo queryExtInfo);
+    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(RowKey startRowKey, RowKey endRowKey, Class<? extends T> type, QueryExtInfo queryExtInfo);
 
     /**
      * Dynamic query to find POJO and row key list with range in
@@ -301,8 +278,7 @@ public interface BasicService {
      * @param type POJO type.
      * @return POJO and key list.
      * */
-    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
-            RowKey startRowKey, long pageSize, Class<? extends T> type);
+    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(RowKey startRowKey, long pageSize, Class<? extends T> type);
 
     /**
      * Find POJO and row key list with range in [startRowKey,endRowKey).
@@ -314,9 +290,7 @@ public interface BasicService {
      * 
      * @return POJO and key list.
      * */
-    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(
-            RowKey startRowKey, long pageSize, Class<? extends T> type,
-            QueryExtInfo queryExtInfo);
+    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyList(RowKey startRowKey, long pageSize, Class<? extends T> type, QueryExtInfo queryExtInfo);
 
     /**
      * Dynamic query to find POJO and row key list with range in
@@ -370,8 +344,7 @@ public interface BasicService {
      * 
      * @return POJO and key list.
      * */
-    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyBatch(
-            List<RowKey> rowKeyList, Class<? extends T> type);
+    public <T> List<SimpleHbaseDOWithKeyResult<T>> findObjectAndKeyBatch(List<RowKey> rowKeyList, Class<? extends T> type);
 
     /**
      * Put POJO.
@@ -451,7 +424,7 @@ public interface BasicService {
      * @param type POJO type.
      * @return POJO and key list.
      * */
-    public <T> Pagination<T> findPageAndKeyList(
+    public <T> Paginator<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             long pageNo, long pageSize);
 
@@ -465,7 +438,7 @@ public interface BasicService {
      * 
      * @return POJO and key list.
      * */
-    public <T> Pagination<T> findPageAndKeyList(
+    public <T> Paginator<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             QueryExtInfo queryExtInfo,
             long pageNo, long pageSize);
@@ -482,7 +455,7 @@ public interface BasicService {
      * 
      * @return POJO and key list.
      * */
-    public <T> Pagination<T> findPageAndKeyList(
+    public <T> Paginator<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, @Nullable Map<String, Object> para,
             long pageNo, long pageSize);
@@ -500,7 +473,7 @@ public interface BasicService {
      * 
      * @return POJO and key list.
      * */
-    public <T> Pagination<T> findPageAndKeyList(
+    public <T> Paginator<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, @Nullable Map<String, Object> para,
             QueryExtInfo queryExtInfo,
@@ -516,9 +489,7 @@ public interface BasicService {
      * @param type POJO type.
      * @return POJO list.
      * */
-    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
-            Class<? extends T> type,
-            long pageNo, long pageSize);
+    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey, Class<? extends T> type, long pageNo, long pageSize);
 
     /**
      * Find POJO list with range in [startRowKey,endRowKey).
@@ -530,9 +501,8 @@ public interface BasicService {
      * 
      * @return POJO list.
      * */
-    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
-            Class<? extends T> type, QueryExtInfo queryExtInfo,
-            long pageNo, long pageSize);
+    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+            Class<? extends T> type, QueryExtInfo queryExtInfo, long pageNo, long pageSize);
 
     /**
      * Dynamic query to find POJO list with range in [startRowKey,endRowKey).
@@ -545,7 +515,7 @@ public interface BasicService {
      * 
      * @return POJO list.
      * */
-    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, String id,
             @Nullable Map<String, Object> para,
             long pageNo, long pageSize);
@@ -562,8 +532,6 @@ public interface BasicService {
      * 
      * @return POJO list.
      * */
-    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
-            Class<? extends T> type, String id,
-            @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo,
-            long pageNo, long pageSize);
+    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+            Class<? extends T> type, String id, @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo, long pageNo, long pageSize);
 }

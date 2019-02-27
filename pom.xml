@@ -17,7 +17,7 @@
 	
 	<properties>
 		<file.encoding>UTF-8</file.encoding>
-		<spring.version>4.2.0.RELEASE</spring.version>
+		<spring.version>4.3.22.RELEASE</spring.version>
 		<antlr4.version>4.0</antlr4.version>
 		<junit.version>4.12</junit.version>
 	</properties>

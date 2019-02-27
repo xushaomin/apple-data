@@ -74,12 +74,10 @@ public class QueryExtInfo {
 
     public void setLimit(long startIndex, long length) {
         if (startIndex < 0) {
-            throw new SimpleHBaseException("startIndex is invalid. startIndex="
-                    + startIndex);
+            throw new SimpleHBaseException("startIndex is invalid. startIndex=" + startIndex);
         }
         if (length < 1) {
-            throw new SimpleHBaseException("length is invalid. length="
-                    + length);
+            throw new SimpleHBaseException("length is invalid. length=" + length);
         }
         this.startIndex = startIndex;
         this.length = length;

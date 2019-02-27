@@ -109,8 +109,7 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
     /**
      * Construct Scan.
      * */
-    protected Scan constructScan(RowKey startRowKey, RowKey endRowKey,
-            @Nullable Filter filter, @Nullable QueryExtInfo queryExtInfo) {
+    protected Scan constructScan(RowKey startRowKey, RowKey endRowKey, @Nullable Filter filter, @Nullable QueryExtInfo queryExtInfo) {
         Util.checkRowKey(startRowKey);
         Util.checkRowKey(endRowKey);
 
@@ -130,7 +129,6 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
                 }
             }
         }
-
         scan.setCaching(cachingSize);
         scan.setFilter(filter);
         return postConstructScan(scan);
@@ -305,8 +303,7 @@ public abstract class SimpleHbaseClientBase implements SimpleHbaseClient {
      * 
      * @return SimpleHbaseDOWithKeyResult.
      * */
-    protected <T> SimpleHbaseDOWithKeyResult<T> convertToSimpleHbaseDOWithKeyResult(
-            Result hbaseResult, Class<? extends T> type) {
+    protected <T> SimpleHbaseDOWithKeyResult<T> convertToSimpleHbaseDOWithKeyResult(Result hbaseResult, Class<? extends T> type) {
 
         Cell[] cells = hbaseResult.rawCells();
         if (cells == null || cells.length == 0) {

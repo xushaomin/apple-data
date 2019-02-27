@@ -4,7 +4,7 @@ import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.springframework.data.hadoop.hbase.HbaseTemplate;
 
-import com.appleframework.data.core.page.Pagination;
+import com.appleframework.model.page.Paginator;
 
 /**
  * Callback handling scanner results.
@@ -13,6 +13,7 @@ import com.appleframework.data.core.page.Pagination;
  * 
  * @author Costin Leau
  */
+@SuppressWarnings("deprecation")
 public interface PageExtractor<T> {
 	
 	/**
@@ -23,6 +24,6 @@ public interface PageExtractor<T> {
 	 * @return an arbitrary result object, or null if none (the extractor will typically be stateful in the latter case). 
 	 * @throws Exception if an Hbase exception is encountered
 	 */
-	Pagination<T> extractData(ResultScanner results, HTableInterface htable, long pageNo, long pageSize) throws Exception;
+	Paginator<T> extractData(ResultScanner results, HTableInterface htable, long pageNo, long pageSize) throws Exception;
 }
 

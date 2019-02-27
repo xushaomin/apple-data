@@ -16,8 +16,9 @@ import org.springframework.data.hadoop.hbase.HbaseUtils;
 import org.springframework.data.hadoop.hbase.RowMapper;
 import org.springframework.util.Assert;
 
-import com.appleframework.data.core.page.Pagination;
+import com.appleframework.model.page.Paginator;
 
+@SuppressWarnings("deprecation")
 public class HbaseTemplate2 extends HbaseAccessor implements HbaseOperations {
 
 	private boolean autoFlush = true;
@@ -38,7 +39,6 @@ public class HbaseTemplate2 extends HbaseAccessor implements HbaseOperations {
 		HbaseUtils.releaseTable(tableName, table, getTableFactory());
 	}
 
-	@SuppressWarnings("deprecation")
 	private boolean applyFlushSetting(HTableInterface table) {
 		boolean autoFlush = table.isAutoFlush();
 		/*if (table instanceof HTable) {
@@ -164,11 +164,11 @@ public class HbaseTemplate2 extends HbaseAccessor implements HbaseOperations {
 	}
 	
 	@Override
-	public <T> Pagination<T> page(String tableName, final Scan scan, final PageExtractor<T> action, 
+	public <T> Paginator<T> page(String tableName, final Scan scan, final PageExtractor<T> action, 
 			final long pageNo, final long pageSize) {
 		return execute(tableName, new PageCallback<T>() {
 			@Override
-			public Pagination<T> doInPage(HTableInterface htable) throws Throwable {
+			public Paginator<T> doInPage(HTableInterface htable) throws Throwable {
 				ResultScanner scanner = htable.getScanner(scan);
 				try {
 					return action.extractData(scanner, htable, pageNo, pageSize);
@@ -187,7 +187,7 @@ public class HbaseTemplate2 extends HbaseAccessor implements HbaseOperations {
 	}
 	
 	@Override
-	public <T> Pagination<T> page(String tableName, String family, final RowMapper<T> action,
+	public <T> Paginator<T> page(String tableName, String family, final RowMapper<T> action,
 			final long pageNo, final long pageSize) {
 		Scan scan = new Scan();
 		scan.addFamily(family.getBytes(getCharset()));
@@ -202,7 +202,7 @@ public class HbaseTemplate2 extends HbaseAccessor implements HbaseOperations {
 	}
 	
 	@Override
-	public <T> Pagination<T> page(String tableName, String family, String qualifier, final RowMapper<T> action,
+	public <T> Paginator<T> page(String tableName, String family, String qualifier, final RowMapper<T> action,
 			final long pageNo, final long pageSize) {
 		Scan scan = new Scan();
 		scan.addColumn(family.getBytes(getCharset()), qualifier.getBytes(getCharset()));
@@ -215,7 +215,7 @@ public class HbaseTemplate2 extends HbaseAccessor implements HbaseOperations {
 	}
 	
 	@Override
-	public <T> Pagination<T> page(String tableName, final Scan scan, final RowMapper<T> action, long pageNo, long pageSize) {
+	public <T> Paginator<T> page(String tableName, final Scan scan, final RowMapper<T> action, long pageNo, long pageSize) {
 		return page(tableName, scan, new PageMapperResultsExtractor<T>(action), pageNo, pageSize);
 	}
 
@@ -278,7 +278,7 @@ public class HbaseTemplate2 extends HbaseAccessor implements HbaseOperations {
 	}
 	
 	@Override
-	public <T> Pagination<T> execute(String tableName, PageCallback<T> action) {
+	public <T> Paginator<T> execute(String tableName, PageCallback<T> action) {
 		Assert.notNull(action, "Callback object must not be null");
 		Assert.notNull(tableName, "No table specified");
 
@@ -286,7 +286,7 @@ public class HbaseTemplate2 extends HbaseAccessor implements HbaseOperations {
 
 		try {
 			boolean previousFlushSetting = applyFlushSetting(table);
-			Pagination<T> result = action.doInPage(table);
+			Paginator<T> result = action.doInPage(table);
 			flushIfNecessary(table, previousFlushSetting);
 			return result;
 		} catch (Throwable th) {

@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
  * 
  * @author Costin Leau
  */
+@SuppressWarnings("deprecation")
 class RowMapperResultsExtractor<T> implements ResultsExtractor<List<T>> {
 
 	private final RowMapper<T> rowMapper;

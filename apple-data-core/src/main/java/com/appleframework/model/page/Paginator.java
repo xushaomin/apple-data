@@ -1,8 +1,6 @@
-package com.appleframework.data.core.page;
+package com.appleframework.model.page;
 
 import java.util.List;
-
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * 列表分页。包含list属性。
@@ -10,11 +8,27 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author xusm
  * 
  */
-public class Pagination<T> extends SimplePage implements java.io.Serializable, Paginable {
+public class Paginator<T> extends SimplePage implements java.io.Serializable, Paginable {
 
 	private static final long serialVersionUID = 1385145241579184848L;
+	
+	public static <T> Paginator<T> create() {
+		return new Paginator<T>();
+	}
+	
+	public static <T> Paginator<T> create(long pageNo, long pageSize) {
+		return new Paginator<T>(pageNo, pageSize);
+	}
+	
+	public static <T> Paginator<T> create(long pageNo, long pageSize, long totalCount) {
+		return new Paginator<T>(pageNo, pageSize, totalCount);
+	}
+	
+	public static <T> Paginator<T> create(long pageNo, long pageSize, long totalCount, List<T> list) {
+		return new Paginator<T>(pageNo, pageSize, totalCount, list);
+	}
 
-	public Pagination() {
+	public Paginator() {
 	}
 	
 	/**
@@ -25,7 +39,7 @@ public class Pagination<T> extends SimplePage implements java.io.Serializable, P
 	 * @param pageSize
 	 *            每页几条数据
 	 */
-	public Pagination(long pageNo, long pageSize) {
+	public Paginator(long pageNo, long pageSize) {
 		super(pageNo, pageSize);
 	}
 
@@ -39,7 +53,7 @@ public class Pagination<T> extends SimplePage implements java.io.Serializable, P
 	 * @param totalCount
 	 *            总共几条数据
 	 */
-	public Pagination(long pageNo, long pageSize, long totalCount) {
+	public Paginator(long pageNo, long pageSize, long totalCount) {
 		super(pageNo, pageSize, totalCount);
 	}
 
@@ -55,26 +69,16 @@ public class Pagination<T> extends SimplePage implements java.io.Serializable, P
 	 * @param list
 	 *            分页内容
 	 */
-	public Pagination(long pageNo, long pageSize, long totalCount, List<T> list) {
+	public Paginator(long pageNo, long pageSize, long totalCount, List<T> list) {
 		super(pageNo, pageSize, totalCount);
 		this.list = list;
-	}
-
-	/**
-	 * 第一条数据位置
-	 * 
-	 * @return
-	 */
-	@XmlTransient
-	public long getFirstResult() {
-		return (pageNo - 1) * pageSize;
 	}
 
 	/**
 	 * 当前页的数据
 	 */
 	private List<T> list;
-
+	
 	/**
 	 * 获得分页内容
 	 * 
@@ -92,7 +96,6 @@ public class Pagination<T> extends SimplePage implements java.io.Serializable, P
 	public void setList(List<T> list) {
 		this.list = list;
 	}
-	
 	
 	/**
 	 * 当前页几条数据

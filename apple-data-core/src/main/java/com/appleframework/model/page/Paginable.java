@@ -1,4 +1,4 @@
-package com.appleframework.data.core.page;
+package com.appleframework.model.page;
 
 /**
  * 分页接口

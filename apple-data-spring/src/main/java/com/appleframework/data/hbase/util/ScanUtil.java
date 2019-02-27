@@ -6,6 +6,7 @@ import com.appleframework.data.hbase.client.RowKey;
 
 public class ScanUtil {
 
+	@SuppressWarnings("deprecation")
 	public static Scan getScan(RowKey startRow, RowKey stopRow) {
 		Scan scan = new Scan();
 		scan.setStartRow(startRow.toBytes());

@@ -3,12 +3,12 @@ package com.appleframework.data.hbase.client.service;
 import java.util.List;
 import java.util.Map;
 
-import com.appleframework.data.core.page.Pagination;
 import com.appleframework.data.hbase.client.PutRequest;
 import com.appleframework.data.hbase.client.QueryExtInfo;
 import com.appleframework.data.hbase.client.RowKey;
 import com.appleframework.data.hbase.client.SimpleHbaseDOWithKeyResult;
 import com.appleframework.data.hbase.core.Nullable;
+import com.appleframework.model.page.Paginator;
 
 /**
  * BasicService
@@ -427,7 +427,7 @@ public interface BasicService {
      * @param type POJO type.
      * @return POJO and key list.
      * */
-    public <T> Pagination<T> findPageAndKeyList(
+    public <T> Paginator<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             long pageNo, long pageSize);
 
@@ -441,7 +441,7 @@ public interface BasicService {
      * 
      * @return POJO and key list.
      * */
-    public <T> Pagination<T> findPageAndKeyList(
+    public <T> Paginator<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             QueryExtInfo queryExtInfo,
             long pageNo, long pageSize);
@@ -458,7 +458,7 @@ public interface BasicService {
      * 
      * @return POJO and key list.
      * */
-    public <T> Pagination<T> findPageAndKeyList(
+    public <T> Paginator<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, @Nullable Map<String, Object> para,
             long pageNo, long pageSize);
@@ -476,7 +476,7 @@ public interface BasicService {
      * 
      * @return POJO and key list.
      * */
-    public <T> Pagination<T> findPageAndKeyList(
+    public <T> Paginator<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, @Nullable Map<String, Object> para,
             QueryExtInfo queryExtInfo,
@@ -492,7 +492,7 @@ public interface BasicService {
      * @param type POJO type.
      * @return POJO list.
      * */
-    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type,
             long pageNo, long pageSize);
 
@@ -506,7 +506,7 @@ public interface BasicService {
      * 
      * @return POJO list.
      * */
-    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, QueryExtInfo queryExtInfo,
             long pageNo, long pageSize);
 
@@ -521,7 +521,7 @@ public interface BasicService {
      * 
      * @return POJO list.
      * */
-    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, String id,
             @Nullable Map<String, Object> para,
             long pageNo, long pageSize);
@@ -538,7 +538,7 @@ public interface BasicService {
      * 
      * @return POJO list.
      * */
-    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, String id,
             @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo,
             long pageNo, long pageSize);

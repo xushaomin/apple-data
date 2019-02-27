@@ -11,6 +11,7 @@ import org.springframework.data.hadoop.hbase.HbaseTemplate;
  * 
  * @author Costin Leau
  */
+@SuppressWarnings("deprecation")
 public interface ResultsExtractor<T> {
 
 	/**

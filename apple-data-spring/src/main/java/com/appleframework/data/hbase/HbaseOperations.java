@@ -4,9 +4,10 @@ package com.appleframework.data.hbase;
 import java.util.List;
 
 import org.apache.hadoop.hbase.client.Scan;
+import org.springframework.data.hadoop.hbase.HbaseTemplate;
 import org.springframework.data.hadoop.hbase.RowMapper;
 
-import com.appleframework.data.core.page.Pagination;
+import com.appleframework.model.page.Paginator;
 
 
 /**
@@ -28,7 +29,7 @@ public interface HbaseOperations {
 	 */
 	<T> T execute(String tableName, TableCallback<T> action);
 	
-	<T> Pagination<T> execute(String tableName, PageCallback<T> action);
+	<T> Paginator<T> execute(String tableName, PageCallback<T> action);
 
 	/**
 	 * Scans the target table, using the given family. The content is processed by the given action typically
@@ -81,7 +82,7 @@ public interface HbaseOperations {
 	 */
 	<T> List<T> find(String tableName, String family, final RowMapper<T> action);
 	
-	<T> Pagination<T> page(String tableName, String family, final RowMapper<T> action,
+	<T> Paginator<T> page(String tableName, String family, final RowMapper<T> action,
 			long pageNo, long pageSize);
 
 
@@ -98,7 +99,7 @@ public interface HbaseOperations {
 	 */
 	<T> List<T> find(String tableName, String family, String qualifier, final RowMapper<T> action);
 	
-	<T> Pagination<T> page(String tableName, String family, String qualifier, final RowMapper<T> action,
+	<T> Paginator<T> page(String tableName, String family, String qualifier, final RowMapper<T> action,
 			long pageNo, long pageSize);
 
 
@@ -126,7 +127,7 @@ public interface HbaseOperations {
 	 * @param <T> action type
 	 * @return a list of objects mapping the scanned rows
 	 */
-	<T> Pagination<T> page(String tableName, final Scan scan, final RowMapper<T> action, long pageNo, long pageSize);
+	<T> Paginator<T> page(String tableName, final Scan scan, final RowMapper<T> action, long pageNo, long pageSize);
 	
 	/**
 	 * Scans the target table using the given {@link Scan} object. Suitable for maximum control over the scanning
@@ -139,7 +140,7 @@ public interface HbaseOperations {
 	 * @param <T> action type
 	 * @return the result object of the callback action, or null
 	 */
-	<T> Pagination<T> page(String tableName, final Scan scan, final PageExtractor<T> action, 
+	<T> Paginator<T> page(String tableName, final Scan scan, final PageExtractor<T> action, 
 			long pageNo, long pageSize);
 
 

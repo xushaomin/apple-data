@@ -3,7 +3,7 @@ package com.appleframework.data.hbase;
 import org.apache.hadoop.hbase.client.HTableInterface;
 import org.springframework.data.hadoop.hbase.HbaseTemplate;
 
-import com.appleframework.data.core.page.Pagination;
+import com.appleframework.model.page.Paginator;
 
 /**
  * Callback interface for Hbase code. To be used with {@link HbaseTemplate}'s execution methods, often as anonymous classes within a method implementation without
@@ -11,6 +11,7 @@ import com.appleframework.data.core.page.Pagination;
  * 
  * @author Costin Leau
  */
+@SuppressWarnings("deprecation")
 public interface PageCallback<T> {
 
 	/**
@@ -20,6 +21,6 @@ public interface PageCallback<T> {
 	 * @return a result object, or null if none
 	 * @throws Throwable thrown by the Hbase API
 	 */
-	Pagination<T> doInPage(HTableInterface table) throws Throwable;
+	Paginator<T> doInPage(HTableInterface table) throws Throwable;
 
 }

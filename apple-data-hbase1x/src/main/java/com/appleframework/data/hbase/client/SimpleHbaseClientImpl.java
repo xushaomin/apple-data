@@ -1,7 +1,6 @@
 package com.appleframework.data.hbase.client;
 
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,12 +15,9 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-
 import org.apache.hadoop.hbase.filter.Filter;
 
-import com.appleframework.data.core.page.Pagination;
 import com.appleframework.data.hbase.antlr.auto.StatementsParser.Constant2Context;
-
 import com.appleframework.data.hbase.antlr.auto.StatementsParser.DeletehqlcContext;
 import com.appleframework.data.hbase.antlr.auto.StatementsParser.InserthqlcContext;
 import com.appleframework.data.hbase.antlr.auto.StatementsParser.ProgContext;
@@ -39,6 +35,7 @@ import com.appleframework.data.hbase.exception.SimpleHBaseException;
 import com.appleframework.data.hbase.hql.HBaseQuery;
 import com.appleframework.data.hbase.util.StringUtil;
 import com.appleframework.data.hbase.util.Util;
+import com.appleframework.model.page.Paginator;
 
 /**
  * SimpleHbaseClient default implementation.
@@ -628,16 +625,15 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                     continue;
                 }
                 List<SimpleHbaseDOResult<T>> tem = convertToSimpleHbaseDOResult(result, type);
-                if (!tem.isEmpty()) {
-                    resultList.add(tem);
-                    if (++resultCounter >= length) {
-                        break;
-                    }
-                }
+				if (!tem.isEmpty()) {
+					resultList.add(tem);
+					if (++resultCounter >= length) {
+						break;
+					}
+				}
             }
         } catch (IOException e) {
-            throw new SimpleHBaseException(
-                    "findObjectList_internal_mv. startRowKey=" + startRowKey + " pageSize=" + pageSize + " type=" + type, e);
+            throw new SimpleHBaseException("findObjectList_internal_mv. startRowKey=" + startRowKey + " pageSize=" + pageSize + " type=" + type, e);
         } finally {
             Util.close(resultScanner);
             //Util.close(htableInterface);
@@ -849,12 +845,9 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         htableInterface.setAutoFlush(getAutoFlush());
         boolean result = false;
         try {
-            result = htableInterface.checkAndPut(rowKey.toBytes(),
-                    versionedColumnInfo.familyBytes,
-                    versionedColumnInfo.qualifierBytes, oldValueOfVersion, put);
+            result = htableInterface.checkAndPut(rowKey.toBytes(), versionedColumnInfo.familyBytes, versionedColumnInfo.qualifierBytes, oldValueOfVersion, put);
         } catch (IOException e) {
-            throw new SimpleHBaseException("updateObjectWithVersion. rowKey="
-                    + rowKey + " t=" + t + " oldVersion=" + oldVersion, e);
+            throw new SimpleHBaseException("updateObjectWithVersion. rowKey=" + rowKey + " t=" + t + " oldVersion=" + oldVersion, e);
         } finally {
             //Util.close(htableInterface);
             closeHTable(htableInterface);
@@ -874,8 +867,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         String tableName = TreeUtil.parseTableName(progContext);
         checkTableName(tableName);
 
-        List<HBaseColumnSchema> hbaseColumnSchemaList = ContextUtil
-                .parseHBaseColumnSchemaList(hbaseTableConfig, context.cidList());
+        List<HBaseColumnSchema> hbaseColumnSchemaList = ContextUtil.parseHBaseColumnSchemaList(hbaseTableConfig, context.cidList());
         List<Constant2Context> constant2ContextList = context.constant2List().constant2();
         Util.check(hbaseColumnSchemaList.size() == constant2ContextList.size());
 
@@ -893,16 +885,12 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         for (int i = 0; i < hbaseColumnSchemaList.size(); i++) {
             HBaseColumnSchema hbaseColumnSchema = hbaseColumnSchemaList.get(i);
             Constant2Context constant2Context = constant2ContextList.get(i);
-            Object value = ContextUtil.parseConstant2(hbaseColumnSchema,
-                    constant2Context, simpleHbaseRuntimeSetting);
+            Object value = ContextUtil.parseConstant2(hbaseColumnSchema, constant2Context, simpleHbaseRuntimeSetting);
             byte[] data = convertValueToBytes(value, hbaseColumnSchema);
             if (ts == null) {
-                put.add(hbaseColumnSchema.getFamilyBytes(),
-                        hbaseColumnSchema.getQualifierBytes(), data);
+                put.add(hbaseColumnSchema.getFamilyBytes(), hbaseColumnSchema.getQualifierBytes(), data);
             } else {
-                put.add(hbaseColumnSchema.getFamilyBytes(),
-                        hbaseColumnSchema.getQualifierBytes(), ts.getTime(),
-                        data);
+                put.add(hbaseColumnSchema.getFamilyBytes(), hbaseColumnSchema.getQualifierBytes(), ts.getTime(), data);
             }
         }
 
@@ -931,17 +919,14 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 
         //cid list
         SelectCidListContext selectCidListContext = context.selectCidList();
-        List<HBaseColumnSchema> hbaseColumnSchemaList = ContextUtil
-                .parseHBaseColumnSchemaList(hbaseTableConfig, selectCidListContext);
+        List<HBaseColumnSchema> hbaseColumnSchemaList = ContextUtil.parseHBaseColumnSchemaList(hbaseTableConfig, selectCidListContext);
         Util.check(!hbaseColumnSchemaList.isEmpty());
 
         //filter
-        Filter filter = ContextUtil.parseFilter(context.wherec(),
-                hbaseTableConfig, simpleHbaseRuntimeSetting);
+        Filter filter = ContextUtil.parseFilter(context.wherec(), hbaseTableConfig, simpleHbaseRuntimeSetting);
 
         //rowkeys.        
-        RowKeyRange rowKeyRange = ContextUtil.parseRowKeyRange(
-                context.rowkeyrange(), simpleHbaseRuntimeSetting);
+        RowKeyRange rowKeyRange = ContextUtil.parseRowKeyRange(context.rowkeyrange(), simpleHbaseRuntimeSetting);
 
         RowKey startRowKey = rowKeyRange.getStart();
         RowKey endRowKey = rowKeyRange.getEnd();
@@ -991,12 +976,12 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                     continue;
                 }
                 List<SimpleHbaseCellResult> tem = convertToSimpleHbaseCellResultList(result);
-                if (!tem.isEmpty()) {
-                    resultList.add(tem);
-                    if (++resultCounter >= length) {
-                        break;
-                    }
-                }
+				if (!tem.isEmpty()) {
+					resultList.add(tem);
+					if (++resultCounter >= length) {
+						break;
+					}
+				}
             }
         } catch (IOException e) {
             throw new SimpleHBaseException("select. hql=" + hql, e);
@@ -1125,9 +1110,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                         delete.deleteColumns(columnInfo.familyBytes, columnInfo.qualifierBytes);
                     } else {
                         //delete specified version.
-                        delete.deleteColumn(columnInfo.familyBytes, 
-                        					columnInfo.qualifierBytes, 
-                        					deleteRequest.getTimestamp().longValue());
+                        delete.deleteColumn(columnInfo.familyBytes, columnInfo.qualifierBytes, deleteRequest.getTimestamp().longValue());
                     }
                 }
             }
@@ -1193,14 +1176,11 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 
         //cid list
         SelectCidListContext selectCidListContext = context.selectCidList();
-        List<HBaseColumnSchema> hbaseColumnSchemaList = ContextUtil
-                .parseHBaseColumnSchemaList(hbaseTableConfig,
-                        selectCidListContext);
+        List<HBaseColumnSchema> hbaseColumnSchemaList = ContextUtil.parseHBaseColumnSchemaList(hbaseTableConfig, selectCidListContext);
         Util.check(!hbaseColumnSchemaList.isEmpty());
 
         //filter
-        Filter filter = ContextUtil.parseFilter(context.wherec(),
-                hbaseTableConfig, simpleHbaseRuntimeSetting);
+        Filter filter = ContextUtil.parseFilter(context.wherec(), hbaseTableConfig, simpleHbaseRuntimeSetting);
 
         //rowkeys.
         RowKeyRange rowKeyRange = ContextUtil.parseRowKeyRange(context.rowkeyrange(), simpleHbaseRuntimeSetting);
@@ -1229,8 +1209,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             @Nullable List<HBaseColumnSchema> hbaseColumnSchemaList,
             @Nullable Date ts) {
 
-        Util.check((columnInfoList != null && !columnInfoList.isEmpty())
-                || (hbaseColumnSchemaList != null && !hbaseColumnSchemaList.isEmpty()));
+        Util.check((columnInfoList != null && !columnInfoList.isEmpty()) || (hbaseColumnSchemaList != null && !hbaseColumnSchemaList.isEmpty()));
 
         final int deleteBatch = getDeleteBatch();
 
@@ -1267,15 +1246,10 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                         for (HBaseColumnSchema hbaseColumnSchema : hbaseColumnSchemaList) {
                             if (ts == null) {
                                 //delete all versions.
-                                delete.deleteColumns(
-                                        hbaseColumnSchema.getFamilyBytes(),
-                                        hbaseColumnSchema.getQualifierBytes());
+                                delete.deleteColumns(hbaseColumnSchema.getFamilyBytes(), hbaseColumnSchema.getQualifierBytes());
                             } else {
                                 //delete specified version.
-                                delete.deleteColumn(
-                                        hbaseColumnSchema.getFamilyBytes(),
-                                        hbaseColumnSchema.getQualifierBytes(),
-                                        ts.getTime());
+                                delete.deleteColumn(hbaseColumnSchema.getFamilyBytes(), hbaseColumnSchema.getQualifierBytes(), ts.getTime());
                             }
                         }
                     }
@@ -1391,14 +1365,12 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     
     // 分页查询
     @Override
-    public <T> Pagination<T> findPageAndKeyList(
-            RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
-            long pageNo, long pageSize) {
+    public <T> Paginator<T> findPageAndKeyList(RowKey startRowKey, RowKey endRowKey, Class<? extends T> type, long pageNo, long pageSize) {
         return findPageAndKeyList(startRowKey, endRowKey, type, null, pageNo, pageSize);
     }
 
     @Override
-    public <T> Pagination<T> findPageAndKeyList(
+    public <T> Paginator<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             QueryExtInfo queryExtInfo, 
             long pageNo, long pageSize) {
@@ -1407,7 +1379,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     }
 
     @Override
-    public <T> Pagination<T> findPageAndKeyList(
+    public <T> Paginator<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, Map<String, Object> para,
             long pageNo, long pageSize) {
@@ -1416,7 +1388,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     }
 
     @Override
-    public <T> Pagination<T> findPageAndKeyList(
+    public <T> Paginator<T> findPageAndKeyList(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             String id, Map<String, Object> para, QueryExtInfo queryExtInfo,
             long pageNo, long pageSize) {
@@ -1425,7 +1397,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     }
     
     @SuppressWarnings("unchecked")
-	private <T> Pagination<T> findPageAndKeyList_internal(
+	private <T> Paginator<T> findPageAndKeyList_internal(
             RowKey startRowKey, RowKey endRowKey, Class<? extends T> type,
             @Nullable Filter filter, @Nullable QueryExtInfo queryExtInfo, 
             long pageNo, long pageSize) {
@@ -1433,18 +1405,10 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         Util.checkRowKey(endRowKey);
         Util.checkNull(type);
         
-        Pagination<T> page = null;
-
-        // 获取最大返回结果数量
-		if (pageSize <= 0)
-			pageSize = 100;
-
-		if (pageNo <= 0)
-			pageNo = 1;
-
-		// 计算起始页和结束页
-		long firstPage = (pageNo - 1) * pageSize;
-		long endPage = firstPage + pageSize;
+        Paginator<T> page = new Paginator<T>(pageNo, pageSize);
+        long startIndex = page.getFirstResult();
+        long length = pageSize;
+        queryExtInfo.setLimit(startIndex, length);
 
         Scan scan = constructScan(startRowKey, endRowKey, filter, queryExtInfo);
 
@@ -1452,9 +1416,6 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         if (queryExtInfo != null) {
             queryExtInfo.setMaxVersions(1);
         }
-
-        long startIndex = 0L;
-        long length = Long.MAX_VALUE;
 
         if (queryExtInfo != null) {
             if (queryExtInfo.isMaxVersionSet()) {
@@ -1468,17 +1429,12 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
                     throw new SimpleHBaseException("should never happen.", e);
                 }
             }
-            if (queryExtInfo.isLimitSet()) {
-                startIndex = queryExtInfo.getStartIndex();
-                length = queryExtInfo.getLength();
-            }
         }
 
         applyRequestFamilyAndQualifier(type, scan);
 
         HTableInterface htableInterface = htableInterface();
         ResultScanner resultScanner = null;
-        int totalCount = 0;
         
         List<SimpleHbaseDOWithKeyResult<T>> resultList = new ArrayList<SimpleHbaseDOWithKeyResult<T>>();
 
@@ -1486,31 +1442,27 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
             resultScanner = htableInterface.getScanner(scan);
             long ignoreCounter = startIndex;
             long resultCounter = 0L;
+            long totalCounter = 0L;
             Result result = null;
             while ((result = resultScanner.next()) != null) {
+            	totalCounter ++;
                 if (ignoreCounter-- > 0) {
                     continue;
                 }
-
-                if (totalCount >= firstPage && totalCount < endPage) {
-					SimpleHbaseDOWithKeyResult<T> t = convertToSimpleHbaseDOWithKeyResult(result, type);
-	                if (t != null) {
-	                    resultList.add(t);
-	                    if (++resultCounter >= length) {
-	                        break;
-	                    }
-	                }
-				}
-                totalCount ++;
+                if(resultCounter <= length) {
+                	SimpleHbaseDOWithKeyResult<T> t = convertToSimpleHbaseDOWithKeyResult(result, type);
+    				if (t != null) {
+    					resultList.add(t);
+    					resultCounter ++;
+    				}
+                }
             }
             // 封装分页对象
-            page = new Pagination<T>(pageNo, pageSize, totalCount);
+            page.setTotalCount(totalCounter);
          	page.setList((List<T>) resultList);
         } catch (IOException e) {
-        	page = new Pagination<T>(pageNo, pageSize, 0);
-            throw new SimpleHBaseException(
-                    "findPageAndKeyList_internal. startRowKey=" + startRowKey
-                            + " endRowKey=" + endRowKey + " type=" + type, e);
+        	page = new Paginator<T>(pageNo, pageSize, 0);
+            throw new SimpleHBaseException("findPageAndKeyList_internal. startRowKey=" + startRowKey + " endRowKey=" + endRowKey + " type=" + type, e);
         } finally {
             //Util.close(resultScanner);
             Util.close(htableInterface);
@@ -1522,28 +1474,28 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
     
     
     @Override
-    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type,
             long pageNo, long pageSize) {
         return unwrap(findPageAndKeyList(startRowKey, endRowKey, type, pageNo, pageSize));
     }
 
     @Override
-    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, QueryExtInfo queryExtInfo,
             long pageNo, long pageSize) {
         return unwrap(findPageAndKeyList(startRowKey, endRowKey, type, queryExtInfo, pageNo, pageSize));
     }
 
     @Override
-    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, String id, @Nullable Map<String, Object> para,
             long pageNo, long pageSize) {
         return unwrap(findPageAndKeyList(startRowKey, endRowKey, type, id, para, pageNo, pageSize));
     }
 
     @Override
-    public <T> Pagination<T> findPageList(RowKey startRowKey, RowKey endRowKey,
+    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey,
             Class<? extends T> type, String id,
             @Nullable Map<String, Object> para, QueryExtInfo queryExtInfo,
             long pageNo, long pageSize) {
@@ -1552,7 +1504,7 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
 
     
     @SuppressWarnings("unchecked")
-	private <T> Pagination<T> unwrap(Pagination<T> page) {
+	private <T> Paginator<T> unwrap(Paginator<T> page) {
     	List<SimpleHbaseDOWithKeyResult<T>> simpleHbaseDOWithKeyResultList 
     			= (List<SimpleHbaseDOWithKeyResult<T>>) page.getList();
         List<T> resultList = new ArrayList<T>();

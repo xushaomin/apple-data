@@ -10,13 +10,14 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.springframework.data.hadoop.hbase.RowMapper;
 import org.springframework.util.Assert;
 
-import com.appleframework.data.core.page.Pagination;
+import com.appleframework.model.page.Paginator;
 
 /**
  * Adapter encapsulating the RowMapper callback. 
  * 
  * @author Costin Leau
  */
+@SuppressWarnings("deprecation")
 class PageMapperResultsExtractor<T> implements PageExtractor<T> {
 
 	private final RowMapper<T> rowMapper;
@@ -30,8 +31,7 @@ class PageMapperResultsExtractor<T> implements PageExtractor<T> {
 		this.rowMapper = rowMapper;
 	}
 	
-	public Pagination<T> extractData(ResultScanner results, HTableInterface htable, long pageNo, long pageSize) 
-			throws Exception {
+	public Paginator<T> extractData(ResultScanner results, HTableInterface htable, long pageNo, long pageSize) throws Exception {
 		List<T> rs = new ArrayList<T>();
 		long firstIndex = (pageNo - 1) * pageSize;
 		long endIndex = firstIndex + pageSize;
@@ -43,9 +43,9 @@ class PageMapperResultsExtractor<T> implements PageExtractor<T> {
 				Get get = new Get(row);
 				rs.add(this.rowMapper.mapRow(htable.get(get), rowNum));
 			}
-			rowNum ++;
+			rowNum++;
 		}
-		Pagination<T> page = new Pagination<T>(pageNo, pageSize, rowNum);
+		Paginator<T> page = new Paginator<T>(pageNo, pageSize, rowNum);
 		page.setList(rs);
 		return page;
 	}
