@@ -72,6 +72,7 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-hadoop</artifactId>
 			<version>${spring.data.version}</version>
+			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
 					<artifactId>slf4j-api</artifactId>
@@ -89,6 +90,7 @@
 			<artifactId>hbase</artifactId>
 			<version>${hbase.version}</version>
 			<type>pom</type>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -96,12 +98,14 @@
 			<artifactId>hbase</artifactId>
 			<version>${hbase.version}</version>
 			<type>pom</type>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-common</artifactId>
 			<version>${hbase.version}</version>
+			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>jdk.tools</groupId>
@@ -114,24 +118,28 @@
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-client</artifactId>
 			<version>${hbase.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-server</artifactId>
 			<version>${hbase.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-it</artifactId>
 			<version>${hbase.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-shell</artifactId>
 			<version>${hbase.version}</version>
+			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>org.jruby</groupId>
