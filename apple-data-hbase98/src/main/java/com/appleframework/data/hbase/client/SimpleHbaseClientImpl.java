@@ -1339,6 +1339,9 @@ public class SimpleHbaseClientImpl extends SimpleHbaseClientBase {
         Paginator<T> page = new Paginator<T>(pageNo, pageSize);
         long startIndex = page.getFirstResult();
         long length = pageSize;
+        if (queryExtInfo == null) {
+        	queryExtInfo = new QueryExtInfo();
+        }
         queryExtInfo.setLimit(startIndex, length);
 
         Scan scan = constructScan(startRowKey, endRowKey, filter, queryExtInfo);

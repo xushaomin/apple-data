@@ -492,9 +492,7 @@ public interface BasicService {
      * @param type POJO type.
      * @return POJO list.
      * */
-    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey,
-            Class<? extends T> type,
-            long pageNo, long pageSize);
+    public <T> Paginator<T> findPageList(RowKey startRowKey, RowKey endRowKey, Class<? extends T> type, long pageNo, long pageSize);
 
     /**
      * Find POJO list with range in [startRowKey,endRowKey).
