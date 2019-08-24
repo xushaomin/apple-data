@@ -13,32 +13,32 @@
 		<property name="hbaseProperties">
 			<value>
 				fs.default.name=${fs.default.name}
-				dfs.replication=3
+				dfs.replication=${dfs.replication:3}
 
 				hbase.rootdir=${hbase.rootdir}
-				hbase.cluster.distributed=true
-				hbase.hstore.blockingStoreFiles=20
-				hfile.block.cache.size=0.2
+				hbase.cluster.distributed=${hbase.cluster.distributed:true}
+				hbase.hstore.blockingStoreFiles=${hbase.hstore.blockingStoreFiles:20}
+				hfile.block.cache.size=${hfile.block.cache.size:0.2}
 
-				zookeeper.session.timeout=180000
-				hbase.zookeeper.property.tickTime=4000
-				hbase.zookeeper.property.clientPort=2181
+				zookeeper.session.timeout=${zookeeper.session.timeout:180000}
+				hbase.zookeeper.property.tickTime=${hbase.zookeeper.property.tickTime:4000}
+				hbase.zookeeper.property.clientPort=${hbase.zookeeper.property.clientPort:2181}
 				hbase.zookeeper.quorum=${hbase.zookeeper.quorum}
 				hbase.zookeeper.property.dataDir=${hbase.zookeeper.property.dataDir}
 
-				hbase.hregion.max.filesize=10737418240
-				hbase.hregion.memstore.flush.size=268435456
-				hbase.hregion.memstore.block.multiplier=2
-				hbase.hregion.memstore.mslab.enabled=true
+				hbase.hregion.max.filesize=${hbase.hregion.max.filesize:10737418240}
+				hbase.hregion.memstore.flush.size=${hbase.hregion.memstore.flush.size:268435456}
+				hbase.hregion.memstore.block.multiplier=${hbase.hregion.memstore.block.multiplier:2}
+				hbase.hregion.memstore.mslab.enabled=${hbase.hregion.memstore.mslab.enabled:true}
 
-				hbase.regionserver.handler.count=100
-				hbase.regionserver.global.memstore.upperLimit=0.4
-				hbase.regionserver.global.memstore.lowerLimit=0.35
+				hbase.regionserver.handler.count=${hbase.regionserver.handler.count:100}
+				hbase.regionserver.global.memstore.upperLimit=${hbase.regionserver.global.memstore.upperLimit:0.4}
+				hbase.regionserver.global.memstore.lowerLimit=${hbase.regionserver.global.memstore.lowerLimit:0.35}
 
-				hbase.client.scanner.timeout.period=6000000
-				hbase.client.write.buffer=20971520
-				hbase.client.pause=20
-				hbase.client.retries.number=11
+				hbase.client.scanner.timeout.period=${hbase.client.scanner.timeout.period:6000000}
+				hbase.client.write.buffer=${hbase.client.write.buffer:20971520}
+				hbase.client.pause=${hbase.client.pause:20}
+				hbase.client.retries.number=${hbase.client.retries.number:11}
 			</value>
 		</property>
 	</bean>
