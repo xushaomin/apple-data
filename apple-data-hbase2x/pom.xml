@@ -14,7 +14,7 @@
 	
 	<properties>
 		<hbase.version>2.1.2</hbase.version>
-		<hadoop.version>3.1.1</hadoop.version>
+		<hadoop.version>3.2.4</hadoop.version>
 	</properties>
 	
 	<dependencies>
